@@ -11,7 +11,6 @@ export class UsersController {
 
   @ApiOperation({summary: "User Creation"})
   @ApiResponse({status: 200, type: User})
-
   @Post()
   create(@Body() userDto: CreateUserDto) {
     return this.userService.createUser(userDto);
