@@ -3,7 +3,11 @@
     "port": 5000
   },
   "db": {
+<<<<<<< HEAD
     "database": "tree_shop",
+=======
+    "database": "travel_app",
+>>>>>>> a452ebc (init: start server)
     "username": "postgres",
     "host": "kubernetes.docker.internal",
     "port": "5432",
