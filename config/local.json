@@ -1,8 +1,11 @@
 {
   "db": {
     "password": "rootkm"
+<<<<<<< HEAD
   },
   "jwt": {
     "secretKey": "bababooey"
+=======
+>>>>>>> a452ebc (init: start server)
   }
 }
