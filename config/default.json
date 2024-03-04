@@ -3,7 +3,7 @@
     "port": 5000
   },
   "db": {
-    "database": "travel_app",
+    "database": "tree_shop",
     "username": "postgres",
     "host": "kubernetes.docker.internal",
     "port": "5432",
