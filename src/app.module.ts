@@ -1,9 +1,25 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
+import { SequelizeModule } from "@nestjs/sequelize";
+import { UsersModule } from './users/users.module';
+import config from "config";
+import { ConfigModule } from "@nestjs/config";
+import { User } from "./users/users.model";
 
 @Module({
-   controllers: [AppController],
-   providers: [AppService]
+  controllers: [],
+  providers: [],
+  imports: [
+    SequelizeModule.forRoot({
+      dialect: config.get("db.dialect"),
+      host: String(config.get("db.host")),
+      port: Number(config.get("db.port")),
+      username: String(config.get("db.username")),
+      password: String(config.get("db.password")),
+      database: String(config.get("db.database")),
+      models: [User],
+      autoLoadModels: true,
+    }),
+    UsersModule,
+  ],
 })
 export class AppModule {}
