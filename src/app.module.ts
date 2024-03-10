@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { Feedback } from "./feedback/feedback.model";
 import { OrderModule } from './order/order.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   controllers: [],
@@ -26,6 +27,7 @@ import { OrderModule } from './order/order.module';
     AuthModule,
     FeedbackModule,
     OrderModule,
+    ProductModule,
   ],
 })
 export class AppModule {}

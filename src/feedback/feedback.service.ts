@@ -16,7 +16,7 @@ export class FeedbackService {
 
     async getFeedbackByUserId(id: number) {
         const feedback = await this.feedbackRepository.findOne({
-          where: { id },
+          where: { userId: id },
           include: { all: true },
         });
         return feedback;
