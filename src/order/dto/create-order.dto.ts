@@ -4,7 +4,7 @@ import { IsNumber, IsString } from "class-validator";
 export class CreateOrderDto {
     @ApiProperty({ example: "Order number", description: "Order number" })
     @IsNumber({}, {message: "Should be a number"})
-    readonly number: string;
+    readonly number: number;
 
     @ApiProperty({ example: "123.2", description: "Total order amount" })
     @IsNumber({}, {message: "Should be a number"})
