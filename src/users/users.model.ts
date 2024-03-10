@@ -1,14 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { Feedback } from "src/feedback/feedback.model";
 
 interface UserCreationAttrs {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 @Table({ tableName: "users" })
 export class User extends Model<User, UserCreationAttrs> {
-  @ApiProperty({example: "1", description: "Unique identifier"})
+  @ApiProperty({ example: "1", description: "Unique identifier" })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -16,37 +17,49 @@ export class User extends Model<User, UserCreationAttrs> {
     primaryKey: true,
   })
   id: number;
-  @ApiProperty({example: "Medvedik", description: "User Name"})
+  @ApiProperty({ example: "Medvedik", description: "User Name" })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   name: string;
-  @ApiProperty({example: "Medvedik@gmail.com", description: "User email"})
+  @ApiProperty({ example: "Medvedik@gmail.com", description: "User email" })
   @Column({
     type: DataType.STRING,
     unique: true,
     allowNull: false,
   })
   email: string;
-  @ApiProperty({example: "StrongPassword", description: "User password"})
+  @ApiProperty({ example: "StrongPassword", description: "User password" })
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   password: string;
-  @ApiProperty({example: "USER", description: "User access level"})
+  @ApiProperty({ example: "USER", description: "User access level" })
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: "USER"
+    defaultValue: "USER",
   })
   role: string;
-  @ApiProperty({example: "link to image", description: "User image"})
+  @ApiProperty({ example: "link to image", description: "User image" })
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: "USER"
+    defaultValue: "Unknown",
   })
   image: string;
+  @ApiProperty({
+    example: "Saved delivery adresses",
+    description: "User adresses",
+  })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    defaultValue: "Unknown",
+  })
+  adresses: string;
+  @HasMany(() => Feedback)
+  feedback: Feedback[];
 }
