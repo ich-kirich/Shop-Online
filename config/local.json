@@ -1,8 +1,0 @@
-{
-  "db": {
-    "password": "rootkm"
-  },
-  "jwt": {
-    "secretKey": "bababooey"
-  }
-}
