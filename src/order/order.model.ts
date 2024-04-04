@@ -1,12 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
   BelongsTo,
+  BelongsToMany,
   Column,
   DataType,
   ForeignKey,
   Model,
   Table,
 } from "sequelize-typescript";
+import { OrderProduct } from "src/order-product.model";
+import { Product } from "src/product/product.model";
 import { User } from "src/users/users.model";
 
 interface OrderCreationAttrs {
@@ -82,4 +85,7 @@ export class Order extends Model<Order, OrderCreationAttrs> {
 
   @BelongsTo(() => User)
   author: User;
+
+  @BelongsToMany(() => Product, () => OrderProduct)
+  products: Product[];
 }
