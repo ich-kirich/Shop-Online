@@ -7,7 +7,7 @@ export class OrderController {
     constructor(private orderService: OrderService){}
 
     @Post()
-    createFeedback(@Body() dto: CreateOrderDto) {
+    createOrder(@Body() dto: CreateOrderDto) {
         return this.orderService.create(dto)
     }
 }
