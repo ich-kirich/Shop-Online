@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { Feedback } from "src/feedback/feedback.model";
+import { Order } from "src/order/order.model";
 
 interface UserCreationAttrs {
   email: string;
@@ -62,4 +63,6 @@ export class User extends Model<User, UserCreationAttrs> {
   adresses: string;
   @HasMany(() => Feedback)
   feedback: Feedback[];
+  @HasMany(() => Order)
+  order: Order[];
 }

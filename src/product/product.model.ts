@@ -1,10 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
+  BelongsToMany,
   Column,
   DataType,
+  HasMany,
   Model,
   Table,
 } from "sequelize-typescript";
+import { Feedback } from "src/feedback/feedback.model";
+import { OrderProduct } from "src/order-product.model";
+import { Order } from "src/order/order.model";
 
 interface ProductCreationAttrs {
   name: string;
@@ -75,4 +80,10 @@ export class Product extends Model<Product, ProductCreationAttrs> {
     defaultValue: "Unknown",
   })
   description: string;
+
+  @HasMany(() => Feedback)
+  comments: Feedback[];
+
+  @BelongsToMany(() => Order, () => OrderProduct)
+  orders: Order[];
 }
