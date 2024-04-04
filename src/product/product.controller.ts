@@ -7,7 +7,7 @@ export class ProductController {
   constructor(private productService: ProductService) {}
 
   @Post()
-  createFeedback(@Body() dto: CreateProductDto) {
+  createProduct(@Body() dto: CreateProductDto) {
     return this.productService.create(dto);
   }
 }
