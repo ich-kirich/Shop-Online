@@ -40,7 +40,10 @@ export class Order extends Model<Order, OrderCreationAttrs> {
   })
   number: number;
 
-  @ApiProperty({ example: "2024-03-04 08:59:04.341+00", description: "Order date" })
+  @ApiProperty({
+    example: "2024-03-04 08:59:04.341+00",
+    description: "Order date",
+  })
   @Column({
     type: DataType.DATE,
     allowNull: false,
@@ -69,7 +72,10 @@ export class Order extends Model<Order, OrderCreationAttrs> {
   })
   status: string;
 
-  @ApiProperty({ example: "Belarus", description: "Country from where the order was placed" })
+  @ApiProperty({
+    example: "Belarus",
+    description: "Country from where the order was placed",
+  })
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -80,6 +86,7 @@ export class Order extends Model<Order, OrderCreationAttrs> {
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
+    onDelete: "CASCADE",
   })
   userId: number;
 
