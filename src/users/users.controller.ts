@@ -41,28 +41,25 @@ export class UsersController {
     return this.userService.getAllUsers();
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @roles("USER", "ADMIN")
-  @Get("/userProfile")
+  @Get("/profile")
   async getUserProfile(@Req() req, @Body() requestBody: { id?: number }) {
-    const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = this.jwtService.decode(token);
-    let userId = Number(decodedToken.id);
-    if (decodedToken.role === "ADMIN") {
-      userId = requestBody.id;
+    let userId = requestBody.id;
+    let role;
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.split(" ")[1];
+      const decodedToken = this.jwtService.decode(token);
+      if (decodedToken.role === "USER") {
+        userId = Number(decodedToken.id);
+      }
+      role = decodedToken.role;
     }
-    return this.userService.getUserById(userId);
-  }
-
-  @Get("/othersProfile")
-  async getOthersProfile(@Body() requestBody: { id: number }) {
-    return this.userService.getUserByIdOthers(requestBody.id);
+    return this.userService.getUserById(userId, role);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("ADMIN", "USER")
-  @Post("/updateUser")
-  updateUserAdmin(@Req() req, @Body() userDto: updateUserDto) {
+  @Post("/update")
+  updateUser(@Req() req, @Body() userDto: updateUserDto) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
     let userId = Number(decodedToken.id);

@@ -1,6 +1,6 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateFeedbackDto } from "./dto/create-feedback.dto";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Feedback } from "./feedback.model";
 import { User } from "src/users/users.model";
 import { Product } from "src/product/product.model";
@@ -12,8 +12,11 @@ export class FeedbackService {
     @InjectModel(Feedback) private feedbackRepository: typeof Feedback,
   ) {}
 
-  async createFeedback(dto: CreateFeedbackDto) {
-    const feedback = await this.feedbackRepository.create(dto);
+  async createFeedback(id: number, dto: CreateFeedbackDto) {
+    const feedback = await this.feedbackRepository.create({
+      ...dto,
+      userId: id,
+    });
     return feedback;
   }
 
@@ -47,10 +50,10 @@ export class FeedbackService {
     return feedback;
   }
 
-  async updateFeedback(feedbackDto: updateFeedbackDto) {
-    const { feedbackId, userId, newGrade, newText } = feedbackDto;
+  async updateFeedback(id: number, feedbackDto: updateFeedbackDto) {
+    const { feedbackId, newGrade, newText } = feedbackDto;
     const feedback = await Feedback.findByPk(feedbackId);
-    if (userId !== feedback.userId) {
+    if (id !== feedback.userId) {
       throw new Error(
         "The user does not have permissions to modify this comment.",
       );
@@ -69,7 +72,18 @@ export class FeedbackService {
     return feedback;
   }
 
-  async deleteFeedbackById(id: number) {
+  async deleteFeedbackById(id: number, role: string) {
+    if (role === "USER") {
+      const feedback = await this.feedbackRepository.findOne({
+        where: { id },
+      });
+
+      if (!feedback) {
+        throw new NotFoundException(
+          `Feedback with this id ${id} not found`,
+        );
+      }
+    }
     const deletedFeedback = await this.feedbackRepository.destroy({
       where: { id },
     });

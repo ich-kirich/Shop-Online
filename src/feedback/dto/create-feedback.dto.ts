@@ -12,10 +12,6 @@ export class CreateFeedbackDto {
     @Max(5, { message: "Grade should not be greater than 5" })
     readonly grade: number;
 
-    @ApiProperty({example: "1", description: "User Id of the testimonial"})
-    @IsNumber({}, {message: "Should be a number"})
-    readonly userId: number;
-
     @ApiProperty({example: "1", description: "Id of the product to which the comment was left"})
     @IsNumber({}, {message: "Should be a number"})
     readonly productId: number;
