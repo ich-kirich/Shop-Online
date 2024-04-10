@@ -20,7 +20,10 @@ import { updateUserDto } from "src/types/types";
 @ApiTags("Users")
 @Controller("users")
 export class UsersController {
-  constructor(private userService: UsersService, private jwtService: JwtService) {}
+  constructor(
+    private userService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   @ApiOperation({ summary: "User Creation" })
   @ApiResponse({ status: 200, type: User })
@@ -39,19 +42,16 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @roles("ADMIN")
-  @Get("/admProfile")
-  getUserAdmin(@Body() requestBody: { id: number }) {
-    return this.userService.getUserByIdAdmin(requestBody.id);
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("USER", "ADMIN")
   @Get("/userProfile")
-  async getUserProfile(@Req() req) {
+  async getUserProfile(@Req() req, @Body() requestBody: { id?: number }) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
-    return this.userService.getUserById(decodedToken.id);
+    let userId = Number(decodedToken.id);
+    if (decodedToken.role === "ADMIN") {
+      userId = requestBody.id;
+    }
+    return this.userService.getUserById(userId);
   }
 
   @Get("/othersProfile")
@@ -65,7 +65,11 @@ export class UsersController {
   updateUserAdmin(@Req() req, @Body() userDto: updateUserDto) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
-    return this.userService.updateUser(userDto, decodedToken.id, decodedToken.role);
+    let userId = Number(decodedToken.id);
+    if (decodedToken.role === "ADMIN") {
+      userId = Number(userDto.userId);
+    }
+    return this.userService.updateUser(userDto, userId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -74,6 +78,10 @@ export class UsersController {
   deleteUser(@Req() req, @Body() requestBody: { id: number }) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
-    return this.userService.deleteUserById(requestBody.id, decodedToken.id, decodedToken.role);
+    return this.userService.deleteUserById(
+      requestBody.id,
+      decodedToken.id,
+      decodedToken.role,
+    );
   }
 }

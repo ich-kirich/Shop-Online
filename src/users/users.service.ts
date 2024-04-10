@@ -27,14 +27,6 @@ export class UsersService {
     return user;
   }
 
-  async getUserByIdAdmin(id: number) {
-    const user = await this.userRepository.findByPk(id);
-    if (!user) {
-      throw new Error("User not found");
-    }
-    return user;
-  }
-
   async getUserById(id: number) {
     const user = await this.userRepository.findByPk(id);
     if (!user) {
@@ -53,27 +45,24 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(userDto: updateUserDto, id: number, role: string) {
-    const { password, userId, name, image } = userDto;
-    if (userId === id || role === "ADMIN") {
-      const user = await User.findByPk(userId);
-      if (!user) {
-        throw new Error("User not found");
-      }
-      if (password !== undefined) {
-        const hashPassword = await bcrypt.hash(password, 5);
-        user.password = hashPassword;
-      }
-      if (name !== undefined) {
-        user.name = name;
-      }
-      if (image !== undefined) {
-        user.image = image;
-      }
-      await user.save();
-      return user;
+  async updateUser(userDto: updateUserDto, id: number) {
+    const { password, name, image } = userDto;
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw new Error("User not found");
     }
-    throw new Error("User has no rights to change the data");
+    if (password !== undefined) {
+      const hashPassword = await bcrypt.hash(password, 5);
+      user.password = hashPassword;
+    }
+    if (name !== undefined) {
+      user.name = name;
+    }
+    if (image !== undefined) {
+      user.image = image;
+    }
+    await user.save();
+    return user;
   }
 
   // Добавить удаление всех заказов связанных с пользователем
