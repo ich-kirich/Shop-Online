@@ -5,6 +5,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "src/types/types";
 import * as bcrypt from "bcryptjs";
 import { OrderService } from "src/order/order.service";
+import { Order } from "src/order/order.model";
 
 @Injectable()
 export class UsersService {
@@ -27,18 +28,15 @@ export class UsersService {
     return user;
   }
 
-  async getUserById(id: number) {
-    const user = await this.userRepository.findByPk(id);
-    if (!user) {
-      throw new Error("User not found");
+  async getUserById(id: number, role: string) {
+    let user;
+    if(role) {
+      user = await this.userRepository.findByPk(id);
+    } else {
+      user = await this.userRepository.findByPk(id, {
+        attributes: ["id", "name", "email", "image", "role"],
+      });
     }
-    return user;
-  }
-
-  async getUserByIdOthers(id: number) {
-    const user = await this.userRepository.findByPk(id, {
-      attributes: ["id", "name", "email", "image", "role"],
-    });
     if (!user) {
       throw new Error("User not found");
     }
@@ -65,17 +63,18 @@ export class UsersService {
     return user;
   }
 
-  // Добавить удаление всех заказов связанных с пользователем
-  async deleteUserById(deleteId: number, userId: number, role: string) {
-    if (deleteId === userId || role === "ADMIN") {
-      const deletedUser = await this.userRepository.destroy({
-        where: { id: deleteId },
-        cascade: true,
-      });
-
-      if (deletedUser === 0) {
+  async deleteUserById(id: number, userId: number, role: string) {
+    if (id === userId || role === "ADMIN") {
+      const user = await this.userRepository.findByPk(id);
+      if (!user) {
         throw new Error("User not found");
       }
+      await Order.destroy({
+        where: { userId: id }
+      });
+      const deletedUser = await this.userRepository.destroy({
+        where: { id }
+      });
 
       return { success: true };
     }

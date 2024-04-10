@@ -30,9 +30,6 @@ export class updateFeedbackDto {
   @IsNumber({}, { message: "FeedbackId should be a number" })
   readonly feedbackId: number;
 
-  @IsNumber({}, { message: "UserId should be a number" })
-  readonly userId: number;
-
   @ApiProperty({ example: "4", description: "Feedback grade" })
   @IsNumber({}, { message: "New grade should be a number" })
   @Min(1, { message: "Grade should not be less than 1" })
