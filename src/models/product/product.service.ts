@@ -2,8 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { Product } from "./product.model";
 import { CreateProductDto } from "./dto/create-product.dto";
-import { Feedback } from "src/feedback/feedback.model";
 import { updateProductDto } from "src/types/types";
+import { Feedback } from "../feedback/feedback.model";
 
 @Injectable()
 export class ProductService {
@@ -46,12 +46,11 @@ export class ProductService {
   }
 
   async updateProduct(productDto: updateProductDto) {
-    const { id, name, type, size, price, quantity, image, description } = productDto;
+    const { id, name, type, size, price, quantity, image, description } =
+      productDto;
     const product = await Product.findByPk(id);
     if (!product) {
-      throw new Error(
-        "Product not found",
-      );
+      throw new Error("Product not found");
     }
     if (name !== undefined) {
       product.name = name;

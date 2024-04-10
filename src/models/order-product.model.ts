@@ -5,8 +5,8 @@ import {
   Model,
   Table,
 } from "sequelize-typescript";
-import { Product } from "./product/product.model";
 import { Order } from "./order/order.model";
+import { Product } from "./product/product.model";
 
 @Table({ tableName: "order_product" })
 export class OrderProduct extends Model<OrderProduct> {

@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { OrderService } from "./order.service";
 import { CreateOrderDto } from "./dto/create-order.dto";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { RolesGuard } from "src/auth/roles.guard";
-import { roles } from "src/auth/roles-auth.decorator";
+import { JwtAuthGuard } from "src/models/auth/jwt-auth.guard";
+import { RolesGuard } from "src/models/auth/roles.guard";
+import { roles } from "src/models/auth/roles-auth.decorator";
 import { JwtService } from "@nestjs/jwt";
 import { updateOrderDto } from "src/types/types";
 

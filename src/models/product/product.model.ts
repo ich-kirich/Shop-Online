@@ -7,9 +7,9 @@ import {
   Model,
   Table,
 } from "sequelize-typescript";
-import { Feedback } from "src/feedback/feedback.model";
-import { OrderProduct } from "src/order-product.model";
-import { Order } from "src/order/order.model";
+import { OrderProduct } from "src/models/order-product.model";
+import { Feedback } from "../feedback/feedback.model";
+import { Order } from "../order/order.model";
 
 interface ProductCreationAttrs {
   name: string;
@@ -73,7 +73,10 @@ export class Product extends Model<Product, ProductCreationAttrs> {
   })
   image: string;
 
-  @ApiProperty({ example: "Product description", description: "Product description" })
+  @ApiProperty({
+    example: "Product description",
+    description: "Product description",
+  })
   @Column({
     type: DataType.STRING,
     allowNull: false,

@@ -8,9 +8,9 @@ import {
   Model,
   Table,
 } from "sequelize-typescript";
-import { OrderProduct } from "src/order-product.model";
-import { Product } from "src/product/product.model";
-import { User } from "src/users/users.model";
+import { OrderProduct } from "src/models/order-product.model";
+import { Product } from "../product/product.model";
+import { User } from "../users/users.model";
 
 interface OrderCreationAttrs {
   number: number;

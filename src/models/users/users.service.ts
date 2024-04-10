@@ -4,8 +4,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "src/types/types";
 import * as bcrypt from "bcryptjs";
-import { OrderService } from "src/order/order.service";
-import { Order } from "src/order/order.model";
+import { Order } from "../order/order.model";
 
 @Injectable()
 export class UsersService {
@@ -30,7 +29,7 @@ export class UsersService {
 
   async getUserById(id: number, role: string) {
     let user;
-    if(role) {
+    if (role) {
       user = await this.userRepository.findByPk(id);
     } else {
       user = await this.userRepository.findByPk(id, {
@@ -70,10 +69,10 @@ export class UsersService {
         throw new Error("User not found");
       }
       await Order.destroy({
-        where: { userId: id }
+        where: { userId: id },
       });
       const deletedUser = await this.userRepository.destroy({
-        where: { id }
+        where: { id },
       });
 
       return { success: true };

@@ -7,8 +7,8 @@ import {
   Model,
   Table,
 } from "sequelize-typescript";
-import { Product } from "src/product/product.model";
-import { User } from "src/users/users.model";
+import { User } from "../users/users.model";
+import { Product } from "../product/product.model";
 
 interface FeedbackCreationAttrs {
   text: string;
@@ -60,7 +60,10 @@ export class Feedback extends Model<Feedback, FeedbackCreationAttrs> {
   @BelongsTo(() => User)
   author: User;
 
-  @ApiProperty({ example: "1", description: "Id of the product to which the comment was left" })
+  @ApiProperty({
+    example: "1",
+    description: "Id of the product to which the comment was left",
+  })
   @ForeignKey(() => Product)
   @Column({
     type: DataType.INTEGER,

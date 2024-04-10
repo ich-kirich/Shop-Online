@@ -1,16 +1,16 @@
 import { Module } from "@nestjs/common";
 import { SequelizeModule } from "@nestjs/sequelize";
-import { UsersModule } from './users/users.module';
 import config from "config";
-import { User } from "./users/users.model";
-import { AuthModule } from './auth/auth.module';
-import { FeedbackModule } from './feedback/feedback.module';
-import { Feedback } from "./feedback/feedback.model";
-import { OrderModule } from './order/order.module';
-import { ProductModule } from './product/product.module';
-import { Product } from "./product/product.model";
-import { Order } from "./order/order.model";
-import { OrderProduct } from "./order-product.model";
+import { OrderProduct } from "./models/order-product.model";
+import { AuthModule } from "./models/auth/auth.module";
+import { Feedback } from "./models/feedback/feedback.model";
+import { FeedbackModule } from "./models/feedback/feedback.module";
+import { Order } from "./models/order/order.model";
+import { OrderModule } from "./models/order/order.module";
+import { Product } from "./models/product/product.model";
+import { ProductModule } from "./models/product/product.module";
+import { User } from "./models/users/users.model";
+import { UsersModule } from "./models/users/users.module";
 
 @Module({
   controllers: [],
