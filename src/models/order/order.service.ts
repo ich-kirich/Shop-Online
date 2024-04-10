@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { Order } from "./order.model";
-import { Product } from "src/product/product.model";
-import { OrderProduct } from "src/order-product.model";
+import { OrderProduct } from "src/models/order-product.model";
 import { updateOrderDto } from "src/types/types";
+import { Product } from "../product/product.model";
 
 @Injectable()
 export class OrderService {

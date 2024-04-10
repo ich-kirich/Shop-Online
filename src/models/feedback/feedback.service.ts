@@ -2,9 +2,9 @@ import { InjectModel } from "@nestjs/sequelize";
 import { CreateFeedbackDto } from "./dto/create-feedback.dto";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Feedback } from "./feedback.model";
-import { User } from "src/users/users.model";
-import { Product } from "src/product/product.model";
 import { updateFeedbackDto } from "src/types/types";
+import { Product } from "../product/product.model";
+import { User } from "../users/users.model";
 
 @Injectable()
 export class FeedbackService {
@@ -79,9 +79,7 @@ export class FeedbackService {
       });
 
       if (!feedback) {
-        throw new NotFoundException(
-          `Feedback with this id ${id} not found`,
-        );
+        throw new NotFoundException(`Feedback with this id ${id} not found`);
       }
     }
     const deletedFeedback = await this.feedbackRepository.destroy({

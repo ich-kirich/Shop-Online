@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
-import { Feedback } from "src/feedback/feedback.model";
-import { Order } from "src/order/order.model";
+import { Feedback } from "../feedback/feedback.model";
+import { Order } from "../order/order.model";
 
 interface UserCreationAttrs {
   email: string;

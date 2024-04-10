@@ -9,9 +9,9 @@ import {
 } from "@nestjs/common";
 import { CreateFeedbackDto } from "./dto/create-feedback.dto";
 import { FeedbackService } from "./feedback.service";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { roles } from "src/auth/roles-auth.decorator";
-import { RolesGuard } from "src/auth/roles.guard";
+import { JwtAuthGuard } from "src/models/auth/jwt-auth.guard";
+import { roles } from "src/models/auth/roles-auth.decorator";
+import { RolesGuard } from "src/models/auth/roles.guard";
 import { updateFeedbackDto } from "src/types/types";
 import { JwtService } from "@nestjs/jwt";
 
