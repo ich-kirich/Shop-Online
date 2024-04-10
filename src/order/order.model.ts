@@ -69,18 +69,9 @@ export class Order extends Model<Order, OrderCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    defaultValue: "Awaiting processing by a specialist"
   })
   status: string;
-
-  @ApiProperty({
-    example: "Belarus",
-    description: "Country from where the order was placed",
-  })
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  country: string;
 
   @ApiProperty({ example: "1", description: "User Id of the order" })
   @ForeignKey(() => User)

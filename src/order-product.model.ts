@@ -21,8 +21,16 @@ export class OrderProduct extends Model<OrderProduct> {
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
+    defaultValue: 0,
   })
-  quantityProduct: number;
+  quantity: number;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  })
+  price: number;
 
   @ForeignKey(() => Product)
   @Column({ type: DataType.INTEGER })
