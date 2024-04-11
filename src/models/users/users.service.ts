@@ -11,24 +11,39 @@ export class UsersService {
   constructor(@InjectModel(User) private userRepository: typeof User) {}
 
   async createUser(dto: CreateUserDto) {
-    const user = await this.userRepository.create(dto);
-    return user;
+    try {
+      const user = await this.userRepository.create(dto);
+      return user;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw new Error("Failed to create user");
+    }
   }
 
   async getAllUsers() {
-    const users = await this.userRepository.findAll();
-    return users;
+    try {
+      const users = await this.userRepository.findAll();
+      return users;
+    } catch (error) {
+      console.error("Error fetching all users:", error);
+      throw new Error("Failed to fetch all users");
+    }
   }
 
   async getUserByEmail(email: string) {
-    const user = await this.userRepository.findOne({
-      where: { email },
-    });
-    return user;
+    try {
+      const user = await this.userRepository.findOne({
+        where: { email },
+      });
+      return user;
+    } catch (error) {
+      console.error(`Error fetching user by email ${email}:`, error);
+      throw new Error(`Failed to fetch user by email ${email}`);
+    }
   }
 
   async getUserById(id: number, role: string) {
-    let user;
+    let user: User;
     if (role) {
       user = await this.userRepository.findByPk(id);
     } else {

@@ -1,6 +1,11 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateFeedbackDto } from "./dto/create-feedback.dto";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { Feedback } from "./feedback.model";
 import { updateFeedbackDto } from "src/types/types";
 import { Product } from "../product/product.model";
@@ -13,53 +18,74 @@ export class FeedbackService {
   ) {}
 
   async createFeedback(id: number, dto: CreateFeedbackDto) {
-    const feedback = await this.feedbackRepository.create({
-      ...dto,
-      userId: id,
-    });
-    return feedback;
+    try {
+      const feedback = await this.feedbackRepository.create({
+        ...dto,
+        userId: id,
+      });
+      return feedback;
+    } catch (error) {
+      console.error("Error while creating feedback:", error);
+      throw new InternalServerErrorException({
+        message: "Failed to create feedback",
+      });
+    }
   }
 
   async getFeedbackByUserId(id: number) {
-    const feedback = await this.feedbackRepository.findAll({
-      where: { userId: id },
-      include: [
-        {
-          model: User,
-          attributes: ["id", "name", "image"],
-        },
-        {
-          model: Product,
-          attributes: ["id", "name", "image"],
-        },
-      ],
-    });
-    return feedback;
+    try {
+      const feedback = await this.feedbackRepository.findAll({
+        where: { userId: id },
+        include: [
+          {
+            model: User,
+            attributes: ["id", "name", "image"],
+          },
+          {
+            model: Product,
+            attributes: ["id", "name", "image"],
+          },
+        ],
+      });
+      return feedback;
+    } catch (error) {
+      console.error("Error while fetching feedback:", error);
+      throw new InternalServerErrorException({
+        message: "Failed to fetch feedback",
+      });
+    }
   }
 
   async getFeedbackByProductId(id: number) {
-    const feedback = await this.feedbackRepository.findAll({
-      where: { productId: id },
-      include: [
-        {
-          model: User,
-          attributes: ["id", "name", "image"],
-        },
-      ],
-    });
-    return feedback;
+    try {
+      const feedback = await this.feedbackRepository.findAll({
+        where: { productId: id },
+        include: [
+          {
+            model: User,
+            attributes: ["id", "name", "image"],
+          },
+        ],
+      });
+      return feedback;
+    } catch (error) {
+      console.error("Error while fetching feedback by product ID:", error);
+      throw new InternalServerErrorException({
+        message: "Failed to fetch feedback by product ID",
+      });
+    }
   }
 
   async updateFeedback(id: number, feedbackDto: updateFeedbackDto) {
     const { feedbackId, newGrade, newText } = feedbackDto;
     const feedback = await Feedback.findByPk(feedbackId);
+    if (!feedback) {
+      throw new NotFoundException("Feedback not found");
+    }
     if (id !== feedback.userId) {
-      throw new Error(
+      throw new ForbiddenException(
         "The user does not have permissions to modify this comment.",
       );
-    }
-    if (!feedback) {
-      throw new Error("Feedback not found");
     }
     if (newGrade !== undefined) {
       feedback.grade = newGrade;
@@ -67,7 +93,6 @@ export class FeedbackService {
     if (newText !== undefined) {
       feedback.text = newText;
     }
-
     await feedback.save();
     return feedback;
   }
@@ -77,9 +102,8 @@ export class FeedbackService {
       const feedback = await this.feedbackRepository.findOne({
         where: { id },
       });
-
       if (!feedback) {
-        throw new NotFoundException(`Feedback with this id ${id} not found`);
+        throw new NotFoundException(`Feedback with id ${id} not found`);
       }
     }
     const deletedFeedback = await this.feedbackRepository.destroy({
@@ -87,7 +111,7 @@ export class FeedbackService {
     });
 
     if (deletedFeedback === 0) {
-      throw new Error("Feedback not found");
+      throw new NotFoundException(`Feedback with id ${id} not found`);
     }
 
     return { success: true };
