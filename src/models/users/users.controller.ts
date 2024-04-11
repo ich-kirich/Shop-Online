@@ -41,10 +41,12 @@ export class UsersController {
     return this.userService.getAllUsers();
   }
 
+  @ApiOperation({ summary: "Get User Profile" })
+  @ApiResponse({ status: 200, type: User })
   @Get("/profile")
   async getUserProfile(@Req() req, @Body() requestBody: { id?: number }) {
     let userId = requestBody.id;
-    let role;
+    let role: string;
     if (req.headers.authorization) {
       const token = req.headers.authorization.split(" ")[1];
       const decodedToken = this.jwtService.decode(token);
@@ -56,6 +58,8 @@ export class UsersController {
     return this.userService.getUserById(userId, role);
   }
 
+  @ApiOperation({ summary: "Update User Profile" })
+  @ApiResponse({ status: 200, type: User })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("ADMIN", "USER")
   @Post("/update")
@@ -69,6 +73,8 @@ export class UsersController {
     return this.userService.updateUser(userDto, userId);
   }
 
+  @ApiOperation({ summary: "Delete User Profile" })
+  @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("ADMIN", "USER")
   @Delete("/delete")

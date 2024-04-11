@@ -20,11 +20,8 @@ export class CreateOrderDto {
     @IsNumber({}, {message: "Should be a number"})
     readonly userId: number;
 
-    // @ApiProperty({example: "1, 2, 3", description: "Must be an array of numbers"})
-    // @IsNumber({}, {message: "Should be a number", each: true })
-    // readonly productIds: number[];
 
-
+    @ApiProperty({example: "[{ id: 1, quantity: 32}, { id: 2, quantity: 519}]", description: "Array of products to order"})
     @IsArray({message: "Must be an array of objects with 'id' and 'quantity' properties"})
     @ValidateNested({ each: true })
     readonly products: IOrderProduct[];

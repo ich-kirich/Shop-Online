@@ -10,7 +10,7 @@ export class CreateProductDto {
     @IsNumber({}, {message: "Should be a number"})
     readonly price: number;
 
-    @ApiProperty({example: "1", description: "Quantity of goods"})
+    @ApiProperty({example: "1321.1", description: "Quantity of products"})
     @IsNumber({}, {message: "Should be a number"})
     readonly quantity: number;
 }

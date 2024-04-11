@@ -28,7 +28,7 @@ export class Feedback extends Model<Feedback, FeedbackCreationAttrs> {
   })
   id: number;
 
-  @ApiProperty({ example: "Testimonial Text", description: "Feedback text" })
+  @ApiProperty({ example: "Text of Feedback", description: "Feedback text" })
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -57,9 +57,6 @@ export class Feedback extends Model<Feedback, FeedbackCreationAttrs> {
   })
   userId: number;
 
-  @BelongsTo(() => User)
-  author: User;
-
   @ApiProperty({
     example: "1",
     description: "Id of the product to which the comment was left",
@@ -70,6 +67,9 @@ export class Feedback extends Model<Feedback, FeedbackCreationAttrs> {
     allowNull: false,
   })
   productId: number;
+
+  @BelongsTo(() => User)
+  author: User;
 
   @BelongsTo(() => Product)
   good: Product;

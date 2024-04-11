@@ -6,11 +6,16 @@ import { RolesGuard } from "src/models/auth/roles.guard";
 import { roles } from "src/models/auth/roles-auth.decorator";
 import { JwtService } from "@nestjs/jwt";
 import { updateOrderDto } from "src/types/types";
+import { Order } from "./order.model";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Orders")
 @Controller("order")
 export class OrderController {
   constructor(private orderService: OrderService, private jwtService: JwtService) {}
 
+  @ApiOperation({ summary: "Order Creation" })
+  @ApiResponse({ status: 200, type: Order })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("USER")
   @Post()
@@ -18,6 +23,8 @@ export class OrderController {
     return this.orderService.create(dto);
   }
 
+  @ApiOperation({ summary: "Get user orders" })
+  @ApiResponse({ status: 200, type: [Order] })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("USER", "ADMIN")
   @Get()
@@ -31,6 +38,8 @@ export class OrderController {
     return this.orderService.getOrdersByUserId(userId);
   }
 
+  @ApiOperation({ summary: "Update order" })
+  @ApiResponse({ status: 200, type: Order })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("USER", "ADMIN")
   @Post("/update")
@@ -44,6 +53,8 @@ export class OrderController {
     return this.orderService.updateOrder(userId, dto);
   }
 
+  @ApiOperation({ summary: "Delete order" })
+  @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("ADMIN", "USER")
   @Delete("/delete")

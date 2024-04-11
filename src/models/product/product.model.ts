@@ -58,7 +58,7 @@ export class Product extends Model<Product, ProductCreationAttrs> {
   })
   price: number;
 
-  @ApiProperty({ example: "123.2", description: "Quantity of goods" })
+  @ApiProperty({ example: "123.2", description: "Quantity of products" })
   @Column({
     type: DataType.FLOAT,
     allowNull: false,
