@@ -37,38 +37,48 @@ export class OrderService {
 
     for (const productInfo of productsInfo) {
       const product = products.find((product) => product.id === productInfo.id);
-      await OrderProduct.create({
-        orderId: order.id,
-        productId: productInfo.id,
-        quantity: product.quantity,
-        price: productInfo.price,
-      });
+      try {
+        await OrderProduct.create({
+          orderId: order.id,
+          productId: productInfo.id,
+          quantity: product.quantity,
+          price: productInfo.price,
+        });
+      } catch (error) {
+        throw new Error(
+          `Failed to add product with this id: ${productInfo.id} to order`,
+        );
+      }
     }
 
     return order;
   }
-
   async getOrdersByUserId(id: number) {
-    const orders = await this.orderRepository.findAll({
-      where: { userId: id },
-      include: [
-        {
-          model: Product,
-          attributes: [
-            "id",
-            "name",
-            "type",
-            "size",
-            "price",
-            "image",
-            "description",
-          ],
-          through: { attributes: ["quantity"] },
-        },
-      ],
-    });
+    try {
+      const orders = await this.orderRepository.findAll({
+        where: { userId: id },
+        include: [
+          {
+            model: Product,
+            attributes: [
+              "id",
+              "name",
+              "type",
+              "size",
+              "price",
+              "image",
+              "description",
+            ],
+            through: { attributes: ["quantity"] },
+          },
+        ],
+      });
 
-    return orders;
+      return orders;
+    } catch (error) {
+      console.error("Error fetching orders by user id:", error);
+      throw new Error("Failed to fetch orders by user id");
+    }
   }
 
   async updateOrder(userId: number, orderDto: updateOrderDto) {
@@ -96,13 +106,18 @@ export class OrderService {
           );
         }
         totalPrice += productInfo.price * product.quantity;
-
-        await OrderProduct.create({
-          orderId: order.id,
-          productId: product.id,
-          quantity: product.quantity,
-          price: productInfo.price,
-        });
+        try {
+          await OrderProduct.create({
+            orderId: order.id,
+            productId: product.id,
+            quantity: product.quantity,
+            price: productInfo.price,
+          });
+        } catch (error) {
+          throw new Error(
+            `Failed to add product with this id: ${product.id} to order`,
+          );
+        }
       }
       order.price = totalPrice;
       await order.save();

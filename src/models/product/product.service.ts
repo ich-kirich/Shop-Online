@@ -13,20 +13,30 @@ export class ProductService {
   ) {}
 
   async create(dto: CreateProductDto) {
-    const product = await this.productRepository.create(dto);
-    return product;
+    try {
+      const product = await this.productRepository.create(dto);
+      return product;
+    } catch (error) {
+      console.error("Error creating product:", error);
+      throw new Error("Failed to create product");
+    }
   }
 
   async getProductById(id: number) {
-    const product = await this.productRepository.findOne({
-      where: { id },
-      include: [
-        {
-          model: Feedback,
-        },
-      ],
-    });
-    return product;
+    try {
+      const product = await this.productRepository.findOne({
+        where: { id },
+        include: [
+          {
+            model: Feedback,
+          },
+        ],
+      });
+      return product;
+    } catch (error) {
+      console.error("Error fetching product by ID:", error);
+      throw new Error("Failed to fetch product by ID");
+    }
   }
 
   async deleteProductById(id: number) {

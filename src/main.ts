@@ -13,11 +13,15 @@ const CONFIG_SWAGGER = new DocumentBuilder()
   .build();
 
 async function start() {
-  const app = await NestFactory.create(AppModule);
-  const documentSwagger = SwaggerModule.createDocument(app, CONFIG_SWAGGER);
-  SwaggerModule.setup("/api/docs", app, documentSwagger);
-  app.useGlobalPipes(new ValidationPipe())
-  await app.listen(PORT, () => console.log(`Server stated on ${PORT}`));
+  try {
+    const app = await NestFactory.create(AppModule);
+    const documentSwagger = SwaggerModule.createDocument(app, CONFIG_SWAGGER);
+    SwaggerModule.setup("/api/docs", app, documentSwagger);
+    app.useGlobalPipes(new ValidationPipe());
+    await app.listen(PORT, () => console.log(`Server started on ${PORT}`));
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 start();
