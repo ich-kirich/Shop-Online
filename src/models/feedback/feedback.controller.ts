@@ -14,7 +14,10 @@ import { roles } from "src/models/auth/roles-auth.decorator";
 import { RolesGuard } from "src/models/auth/roles.guard";
 import { updateFeedbackDto } from "src/types/types";
 import { JwtService } from "@nestjs/jwt";
+import { Feedback } from "./feedback.model";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Feedback")
 @Controller("feedback")
 export class FeedbackController {
   constructor(
@@ -22,6 +25,8 @@ export class FeedbackController {
     private jwtService: JwtService,
   ) {}
 
+  @ApiOperation({ summary: "Feedback Creation" })
+  @ApiResponse({ status: 200, type: Feedback })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("USER")
   @Post()
@@ -31,6 +36,8 @@ export class FeedbackController {
     return this.feedbackService.createFeedback(decodedToken.id, dto);
   }
 
+  @ApiOperation({ summary: "Update Feedback" })
+  @ApiResponse({ status: 200, type: Feedback })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("USER")
   @Post("/update")
@@ -40,22 +47,31 @@ export class FeedbackController {
     return this.feedbackService.updateFeedback(decodedToken.id, dto);
   }
 
+  @ApiOperation({ summary: "Get user feedback" })
+  @ApiResponse({ status: 200, type: [Feedback] })
   @Get("/user")
   getFeedbackByUser(@Body() requestBody: { id: number }) {
     return this.feedbackService.getFeedbackByUserId(requestBody.id);
   }
 
+  @ApiOperation({ summary: "Get feedback of product" })
+  @ApiResponse({ status: 200, type: [Feedback] })
   @Get("/product")
   getFeedbackByProduct(@Body() requestBody: { id: number }) {
     return this.feedbackService.getFeedbackByProductId(requestBody.id);
   }
 
+  @ApiOperation({ summary: "Delete feedback" })
+  @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles("ADMIN", "USER")
   @Delete("/delete")
   deleteFeedback(@Req() req, @Body() requestBody: { id: number }) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
-    return this.feedbackService.deleteFeedbackById(requestBody.id, decodedToken.role);
+    return this.feedbackService.deleteFeedbackById(
+      requestBody.id,
+      decodedToken.role,
+    );
   }
 }

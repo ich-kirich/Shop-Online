@@ -27,6 +27,7 @@ export class loginUserDto {
 }
 
 export class updateFeedbackDto {
+  @ApiProperty({ example: "1", description: "Id of Feedback" })
   @IsNumber({}, { message: "FeedbackId should be a number" })
   readonly feedbackId: number;
 
@@ -37,16 +38,19 @@ export class updateFeedbackDto {
   @IsOptional()
   readonly newGrade: number;
 
+  @ApiProperty({ example: "Text of feedback", description: "Text of feedback" })
   @IsString({ message: "New text should be a string" })
   @IsOptional()
   readonly newText: string;
 }
 
 export class updateUserDto {
+  @ApiProperty({ example: "1", description: "Id of User" })
   @IsNumber({}, { message: "UserId should be a number" })
   @IsOptional()
   readonly userId: number;
 
+  @ApiProperty({ example: "12345", description: "Password of User" })
   @IsString({ message: "Password should be a string" })
   @Length(4, 16, {
     message:
@@ -55,43 +59,53 @@ export class updateUserDto {
   @IsOptional()
   readonly password: string;
 
+  @ApiProperty({ example: "Billy", description: "Username" })
   @IsString({ message: "Name should be a string" })
   @IsOptional()
   readonly name: string;
 
+  @ApiProperty({ example: "link to image", description: "Image" })
   @IsString({ message: "Image should be a string" })
   @IsOptional()
   readonly image: string;
 }
 
 export class updateProductDto {
+  @ApiProperty({ example: "1", description: "Id of product" })
   @IsNumber({}, { message: "Id should be a number" })
   readonly id: number;
 
+  @ApiProperty({ example: "Table", description: "Name of product" })
   @IsString({ message: "Name should be a string" })
   @IsOptional()
   readonly name: string;
 
+  @ApiProperty({ example: "Accessories", description: "Type of product" })
   @IsString({ message: "Type of Product should be a string" })
   @IsOptional()
   readonly type: string;
 
+  @ApiProperty({ example: "12 cm", description: "Size of product" })
   @IsString({ message: "Size should be a string" })
   @IsOptional()
   readonly size: string;
 
+  @ApiProperty({ example: "12", description: "Price of product" })
   @IsNumber({}, { message: "Price should be a number" })
   @IsOptional()
   readonly price: number;
 
+  @ApiProperty({ example: "100", description: "Quantity of product" })
   @IsNumber({}, { message: "Quantity should be a number" })
   @IsOptional()
   readonly quantity: number;
 
+  @ApiProperty({ example: "link to image", description: "Image of product" })
   @IsString({ message: "Image should be a string" })
   @IsOptional()
   readonly image: string;
 
+  @ApiProperty({ example: "This is a table", description: "Description of product" })
   @IsString({ message: "Description should be a string" })
   @IsOptional()
   readonly description: string;
@@ -103,17 +117,21 @@ export interface IOrderProduct {
 }
 
 export class updateOrderDto {
+  @ApiProperty({ example: "1", description: "User id of the user who placed the order" })
   @IsNumber({}, { message: "UserId should be a number" })
   @IsOptional()
   readonly userId: number;
 
+  @ApiProperty({ example: "123 Street, City, Country", description: "Shipping address" })
   @IsString({ message: "Adress should be a string" })
   @IsOptional()
   readonly adress: string;
 
+  @ApiProperty({ example: "1001", description: "Number of order" })
   @IsNumber({}, { message: "should be a number" })
   readonly number: number;
 
+  @ApiProperty({ example: "[{ id: 1, quantity: 32}, { id: 2, quantity: 519}]", description: "Array of products to order" })
   @IsArray({
     message: "Must be an array of objects with 'id' and 'quantity' properties",
   })

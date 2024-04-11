@@ -7,9 +7,11 @@ import {
 } from "sequelize-typescript";
 import { Order } from "./order/order.model";
 import { Product } from "./product/product.model";
+import { ApiProperty } from "@nestjs/swagger";
 
 @Table({ tableName: "order_product" })
 export class OrderProduct extends Model<OrderProduct> {
+  @ApiProperty({ example: "1", description: "Unique identifier" })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -18,6 +20,7 @@ export class OrderProduct extends Model<OrderProduct> {
   })
   id: number;
 
+  @ApiProperty({ example: "1323", description: "Quantity of products" })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -25,6 +28,7 @@ export class OrderProduct extends Model<OrderProduct> {
   })
   quantity: number;
 
+  @ApiProperty({ example: "1000", description: "Price of product" })
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
