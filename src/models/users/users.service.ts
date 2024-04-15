@@ -5,6 +5,7 @@ import { CreateUserDto, UpdateUserDto } from "./dto/create-user.dto";
 import * as bcrypt from "bcryptjs";
 import { Order } from "../order/order.model";
 import { ROLES } from "src/libs/constants";
+import { uploadImage } from "src/libs/utils";
 
 @Injectable()
 export class UsersService {
@@ -66,8 +67,8 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(userDto: UpdateUserDto, id: number) {
-    const { password, name, image } = userDto;
+  async updateUser(userDto: UpdateUserDto, id: number, image?: Express.Multer.File) {
+    const { password, name } = userDto;
     const user = await User.findByPk(id);
     if (!user) {
       this.logger.error(`Error updating user with this id: ${id}`);
@@ -81,7 +82,8 @@ export class UsersService {
       user.name = name;
     }
     if (image !== undefined) {
-      user.image = image;
+      const loadImage = await uploadImage(image);
+      await User.update({ image: loadImage }, { where: { id: user.id } });
     }
     await user.save();
     this.logger.log(`User with this id: ${user.id} was successfully updated`);

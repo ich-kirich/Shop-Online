@@ -12,7 +12,12 @@ export const CONFIG_SWAGGER = new DocumentBuilder()
 
 export const UNKNOWN = "Unknown";
 
-export const SPARE_SECRET_KEY= "SPARE_SECRET_KEY";
+export const SPARE_SECRET_KEY = "SPARE_SECRET_KEY";
+
+export enum DEFAULT_IMAGE {
+  USER_IMAGE = "https://i.ibb.co/1XsL5vV/2024-04-15-122726464.png",
+  PRODUCT_IMAGE = "https://i.ibb.co/Lnbhjc6/default-product.webp",
+}
 
 export enum DB {
   DIALECT = "db.dialect",

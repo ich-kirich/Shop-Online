@@ -11,7 +11,7 @@ import { OrderProduct } from "src/models/order-product.model";
 import { Feedback } from "../feedback/feedback.model";
 import { Order } from "../order/order.model";
 import { IProductCreationAttrs } from "src/types/types";
-import { UNKNOWN } from "src/libs/constants";
+import { DEFAULT_IMAGE, UNKNOWN } from "src/libs/constants";
 
 @Table({ tableName: "product" })
 export class Product extends Model<Product, IProductCreationAttrs> {
@@ -65,7 +65,7 @@ export class Product extends Model<Product, IProductCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: UNKNOWN,
+    defaultValue: DEFAULT_IMAGE.PRODUCT_IMAGE,
   })
   image: string;
 
