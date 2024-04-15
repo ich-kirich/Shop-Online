@@ -7,6 +7,7 @@ import {
   Req,
   UseGuards,
 } from "@nestjs/common";
+import { Request } from "express";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UsersService } from "./users.service";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -16,6 +17,7 @@ import { RolesGuard } from "src/models/auth/roles.guard";
 import { roles } from "src/models/auth/roles-auth.decorator";
 import { JwtService } from "@nestjs/jwt";
 import { updateUserDto } from "src/types/types";
+import { ROLES } from "src/libs/constants";
 
 @ApiTags("Users")
 @Controller("users")
@@ -35,7 +37,7 @@ export class UsersController {
   @ApiOperation({ summary: "Get All users" })
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @roles("ADMIN")
+  @roles(ROLES.ADMIN)
   @Get()
   getAll() {
     return this.userService.getAllUsers();
@@ -44,13 +46,16 @@ export class UsersController {
   @ApiOperation({ summary: "Get User Profile" })
   @ApiResponse({ status: 200, type: User })
   @Get("/profile")
-  async getUserProfile(@Req() req, @Body() requestBody: { id?: number }) {
+  async getUserProfile(
+    @Req() req: Request,
+    @Body() requestBody: { id?: number },
+  ) {
     let userId = requestBody.id;
     let role: string;
     if (req.headers.authorization) {
       const token = req.headers.authorization.split(" ")[1];
       const decodedToken = this.jwtService.decode(token);
-      if (decodedToken.role === "USER") {
+      if (decodedToken.role === ROLES.USER) {
         userId = Number(decodedToken.id);
       }
       role = decodedToken.role;
@@ -61,13 +66,13 @@ export class UsersController {
   @ApiOperation({ summary: "Update User Profile" })
   @ApiResponse({ status: 200, type: User })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @roles("ADMIN", "USER")
+  @roles(ROLES.ADMIN, ROLES.USER)
   @Post("/update")
-  updateUser(@Req() req, @Body() userDto: updateUserDto) {
+  updateUser(@Req() req: Request, @Body() userDto: updateUserDto) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
     let userId = Number(decodedToken.id);
-    if (decodedToken.role === "ADMIN") {
+    if (decodedToken.role === ROLES.ADMIN) {
       userId = Number(userDto.userId);
     }
     return this.userService.updateUser(userDto, userId);
@@ -76,9 +81,9 @@ export class UsersController {
   @ApiOperation({ summary: "Delete User Profile" })
   @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @roles("ADMIN", "USER")
+  @roles(ROLES.ADMIN, ROLES.USER)
   @Delete("/delete")
-  deleteUser(@Req() req, @Body() requestBody: { id: number }) {
+  deleteUser(@Req() req: Request, @Body() requestBody: { id: number }) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
     return this.userService.deleteUserById(

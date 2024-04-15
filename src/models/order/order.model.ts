@@ -11,18 +11,11 @@ import {
 import { OrderProduct } from "src/models/order-product.model";
 import { Product } from "../product/product.model";
 import { User } from "../users/users.model";
-
-interface OrderCreationAttrs {
-  number: number;
-  price: number;
-  adress: string;
-  status: string;
-  country: string;
-  userId: number;
-}
+import { IOrderCreationAttrs } from "src/types/types";
+import { ORDER_STATUSES } from "src/libs/constants";
 
 @Table({ tableName: "order" })
-export class Order extends Model<Order, OrderCreationAttrs> {
+export class Order extends Model<Order, IOrderCreationAttrs> {
   @ApiProperty({ example: "1", description: "Unique identifier" })
   @Column({
     type: DataType.INTEGER,
@@ -69,7 +62,7 @@ export class Order extends Model<Order, OrderCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: "Awaiting processing by a specialist"
+    defaultValue: ORDER_STATUSES.AWAITING_PROCESSING,
   })
   status: string;
 

@@ -5,6 +5,7 @@ import { Order } from "./order.model";
 import { OrderProduct } from "src/models/order-product.model";
 import { updateOrderDto } from "src/types/types";
 import { Product } from "../product/product.model";
+import { ORDER_STATUSES, ROLES } from "src/libs/constants";
 
 @Injectable()
 export class OrderService {
@@ -126,7 +127,7 @@ export class OrderService {
   }
 
   async deleteOrderById(number: number, role: string, userId: number) {
-    if (role === "USER") {
+    if (role === ROLES.USER) {
       const order = await this.orderRepository.findOne({
         where: { userId, number },
       });
@@ -137,7 +138,7 @@ export class OrderService {
         );
       }
 
-      if (order.status === "Awaiting processing by a specialist") {
+      if (order.status === ORDER_STATUSES.AWAITING_PROCESSING) {
         const deletedOrder = await this.orderRepository.destroy({
           where: { number },
         });

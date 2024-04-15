@@ -10,15 +10,11 @@ import {
 import { OrderProduct } from "src/models/order-product.model";
 import { Feedback } from "../feedback/feedback.model";
 import { Order } from "../order/order.model";
-
-interface ProductCreationAttrs {
-  name: string;
-  price: number;
-  quantity: number;
-}
+import { IProductCreationAttrs } from "src/types/types";
+import { UNKNOWN } from "src/libs/constants";
 
 @Table({ tableName: "product" })
-export class Product extends Model<Product, ProductCreationAttrs> {
+export class Product extends Model<Product, IProductCreationAttrs> {
   @ApiProperty({ example: "1", description: "Unique identifier" })
   @Column({
     type: DataType.INTEGER,
@@ -39,7 +35,7 @@ export class Product extends Model<Product, ProductCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: "Unknown",
+    defaultValue: UNKNOWN,
   })
   type: string;
 
@@ -47,7 +43,7 @@ export class Product extends Model<Product, ProductCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: "Unknown",
+    defaultValue: UNKNOWN,
   })
   size: string;
 
@@ -69,7 +65,7 @@ export class Product extends Model<Product, ProductCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: "Unknown",
+    defaultValue: UNKNOWN,
   })
   image: string;
 
@@ -80,7 +76,7 @@ export class Product extends Model<Product, ProductCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: "Unknown",
+    defaultValue: UNKNOWN,
   })
   description: string;
 

@@ -105,7 +105,10 @@ export class updateProductDto {
   @IsOptional()
   readonly image: string;
 
-  @ApiProperty({ example: "This is a table", description: "Description of product" })
+  @ApiProperty({
+    example: "This is a table",
+    description: "Description of product",
+  })
   @IsString({ message: "Description should be a string" })
   @IsOptional()
   readonly description: string;
@@ -116,13 +119,27 @@ export interface IOrderProduct {
   quantity: number;
 }
 
+export class orderProductDto {
+  @ApiProperty({ example: 1, description: "Product ID" })
+  readonly id: number;
+
+  @ApiProperty({ example: 32, description: "Product quantity" })
+  readonly quantity: number;
+}
+
 export class updateOrderDto {
-  @ApiProperty({ example: "1", description: "User id of the user who placed the order" })
+  @ApiProperty({
+    example: "1",
+    description: "User id of the user who placed the order",
+  })
   @IsNumber({}, { message: "UserId should be a number" })
   @IsOptional()
   readonly userId: number;
 
-  @ApiProperty({ example: "123 Street, City, Country", description: "Shipping address" })
+  @ApiProperty({
+    example: "123 Street, City, Country",
+    description: "Shipping address",
+  })
   @IsString({ message: "Adress should be a string" })
   @IsOptional()
   readonly adress: string;
@@ -131,11 +148,41 @@ export class updateOrderDto {
   @IsNumber({}, { message: "should be a number" })
   readonly number: number;
 
-  @ApiProperty({ example: "[{ id: 1, quantity: 32}, { id: 2, quantity: 519}]", description: "Array of products to order" })
+  @ApiProperty({
+    example: "[{ id: 1, quantity: 32}, { id: 2, quantity: 519}]",
+    description: "Array of products to order",
+  })
   @IsArray({
     message: "Must be an array of objects with 'id' and 'quantity' properties",
   })
   @ValidateNested({ each: true })
   @IsOptional()
   readonly products: IOrderProduct[];
+}
+
+export interface IUserCreationAttrs {
+  email: string;
+  password: string;
+}
+
+export interface IProductCreationAttrs {
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface IOrderCreationAttrs {
+  number: number;
+  price: number;
+  adress: string;
+  status: string;
+  country: string;
+  userId: number;
+}
+
+export interface IFeedbackCreationAttrs {
+  text: string;
+  grade: number;
+  userId: number;
+  productId: number;
 }

@@ -5,6 +5,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "src/types/types";
 import * as bcrypt from "bcryptjs";
 import { Order } from "../order/order.model";
+import { ROLES } from "src/libs/constants";
 
 @Injectable()
 export class UsersService {
@@ -78,7 +79,7 @@ export class UsersService {
   }
 
   async deleteUserById(id: number, userId: number, role: string) {
-    if (id === userId || role === "ADMIN") {
+    if (id === userId || role === ROLES.ADMIN) {
       const user = await this.userRepository.findByPk(id);
       if (!user) {
         throw new Error("User not found");
