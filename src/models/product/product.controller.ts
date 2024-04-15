@@ -7,6 +7,7 @@ import { RolesGuard } from "src/models/auth/roles.guard";
 import { updateProductDto } from "src/types/types";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Product } from "./product.model";
+import { ROLES } from "src/libs/constants";
 
 @ApiTags("Products")
 @Controller("product")
@@ -16,7 +17,7 @@ export class ProductController {
   @ApiOperation({ summary: "Product Creation" })
   @ApiResponse({ status: 200, type: Product })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @roles("ADMIN")
+  @roles(ROLES.ADMIN)
   @Post()
   createProduct(@Body() dto: CreateProductDto) {
     return this.productService.create(dto);
@@ -25,7 +26,7 @@ export class ProductController {
   @ApiOperation({ summary: "Update Product" })
   @ApiResponse({ status: 200, type: Product })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @roles("ADMIN")
+  @roles(ROLES.ADMIN)
   @Post("/update")
   updateProduct(@Body() dto: updateProductDto) {
     return this.productService.updateProduct(dto);
@@ -34,7 +35,7 @@ export class ProductController {
   @ApiOperation({ summary: "Delete Product" })
   @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @roles("ADMIN")
+  @roles(ROLES.ADMIN)
   @Delete("/delete")
   deleteProductById(@Body() requestBody: { id: number }) {
     return this.productService.deleteProductById(requestBody.id);

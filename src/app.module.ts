@@ -11,18 +11,19 @@ import { Product } from "./models/product/product.model";
 import { ProductModule } from "./models/product/product.module";
 import { User } from "./models/users/users.model";
 import { UsersModule } from "./models/users/users.module";
+import { DB } from "./libs/constants";
 
 @Module({
   controllers: [],
   providers: [],
   imports: [
     SequelizeModule.forRoot({
-      dialect: config.get("db.dialect"),
-      host: String(config.get("db.host")),
-      port: Number(config.get("db.port")),
-      username: String(config.get("db.username")),
-      password: String(config.get("db.password")),
-      database: String(config.get("db.database")),
+      dialect: config.get(DB.DIALECT),
+      host: String(config.get(DB.HOST)),
+      port: Number(config.get(DB.PORT)),
+      username: String(config.get(DB.USERNAME)),
+      password: String(config.get(DB.PASSWORD)),
+      database: String(config.get(DB.DATABASE)),
       models: [User, Feedback, Product, Order, OrderProduct],
       autoLoadModels: true,
     }),

@@ -10,6 +10,7 @@ import { Feedback } from "./feedback.model";
 import { updateFeedbackDto } from "src/types/types";
 import { Product } from "../product/product.model";
 import { User } from "../users/users.model";
+import { ROLES } from "src/libs/constants";
 
 @Injectable()
 export class FeedbackService {
@@ -98,7 +99,7 @@ export class FeedbackService {
   }
 
   async deleteFeedbackById(id: number, role: string) {
-    if (role === "USER") {
+    if (role === ROLES.USER) {
       const feedback = await this.feedbackRepository.findOne({
         where: { id },
       });

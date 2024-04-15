@@ -9,16 +9,10 @@ import {
 } from "sequelize-typescript";
 import { User } from "../users/users.model";
 import { Product } from "../product/product.model";
-
-interface FeedbackCreationAttrs {
-  text: string;
-  grade: number;
-  userId: number;
-  productId: number;
-}
+import { IFeedbackCreationAttrs } from "src/types/types";
 
 @Table({ tableName: "feedback" })
-export class Feedback extends Model<Feedback, FeedbackCreationAttrs> {
+export class Feedback extends Model<Feedback, IFeedbackCreationAttrs> {
   @ApiProperty({ example: "1", description: "Unique identifier" })
   @Column({
     type: DataType.INTEGER,

@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 import { IsArray, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
-import { IOrderProduct } from "src/types/types";
+import { IOrderProduct, orderProductDto } from "src/types/types";
 
 export class CreateOrderDto {
     @ApiProperty({ example: "Order number", description: "Order number" })
@@ -24,5 +25,6 @@ export class CreateOrderDto {
     @ApiProperty({example: "[{ id: 1, quantity: 32}, { id: 2, quantity: 519}]", description: "Array of products to order"})
     @IsArray({message: "Must be an array of objects with 'id' and 'quantity' properties"})
     @ValidateNested({ each: true })
+    @Type(() => orderProductDto)
     readonly products: IOrderProduct[];
 }
