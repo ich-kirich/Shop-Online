@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
-import { loginUserDto } from "src/types/types";
 import { CreateUserDto } from "../users/dto/create-user.dto";
+import { LoginUserDto } from "./dto/create-auth.dto";
 
 @ApiTags("Authorization")
 @Controller("auth")
@@ -15,7 +15,7 @@ export class AuthController {
     schema: { properties: { token: { type: "string" } } },
   })
   @Post("/login")
-  login(@Body() loginDto: loginUserDto) {
+  login(@Body() loginDto: LoginUserDto) {
     return this.authService.login(loginDto);
   }
 

@@ -8,12 +8,11 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { Request } from "express";
-import { CreateFeedbackDto } from "./dto/create-feedback.dto";
+import { CreateFeedbackDto, UpdateFeedbackDto } from "./dto/create-feedback.dto";
 import { FeedbackService } from "./feedback.service";
 import { JwtAuthGuard } from "src/models/auth/jwt-auth.guard";
 import { roles } from "src/models/auth/roles-auth.decorator";
 import { RolesGuard } from "src/models/auth/roles.guard";
-import { updateFeedbackDto } from "src/types/types";
 import { JwtService } from "@nestjs/jwt";
 import { Feedback } from "./feedback.model";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -43,7 +42,7 @@ export class FeedbackController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.USER)
   @Post("/update")
-  updateFeedback(@Req() req: Request, @Body() dto: updateFeedbackDto) {
+  updateFeedback(@Req() req: Request, @Body() dto: UpdateFeedbackDto) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
     return this.feedbackService.updateFeedback(decodedToken.id, dto);

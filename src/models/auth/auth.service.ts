@@ -7,10 +7,10 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcryptjs";
-import { loginUserDto } from "src/types/types";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 import { User } from "../users/users.model";
 import { UsersService } from "../users/users.service";
+import { LoginUserDto } from "./dto/create-auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(userDto: loginUserDto) {
+  async login(userDto: LoginUserDto) {
     try {
       const user = await this.validateUser(userDto);
       return this.generateToken(user);
@@ -63,7 +63,7 @@ export class AuthService {
     }
   }
 
-  private async validateUser(userDto: loginUserDto) {
+  private async validateUser(userDto: LoginUserDto) {
     const user = await this.userService.getUserByEmail(userDto.email);
     if (!user) {
       throw new UnauthorizedException({ message: "User not found" });

@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { Request } from "express";
-import { CreateUserDto } from "./dto/create-user.dto";
+import { CreateUserDto, UpdateUserDto } from "./dto/create-user.dto";
 import { UsersService } from "./users.service";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { User } from "./users.model";
@@ -16,7 +16,6 @@ import { JwtAuthGuard } from "src/models/auth/jwt-auth.guard";
 import { RolesGuard } from "src/models/auth/roles.guard";
 import { roles } from "src/models/auth/roles-auth.decorator";
 import { JwtService } from "@nestjs/jwt";
-import { updateUserDto } from "src/types/types";
 import { ROLES } from "src/libs/constants";
 
 @ApiTags("Users")
@@ -68,7 +67,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.ADMIN, ROLES.USER)
   @Post("/update")
-  updateUser(@Req() req: Request, @Body() userDto: updateUserDto) {
+  updateUser(@Req() req: Request, @Body() userDto: UpdateUserDto) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
     let userId = Number(decodedToken.id);

@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { User } from "./users.model";
 import { InjectModel } from "@nestjs/sequelize";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { updateUserDto } from "src/types/types";
+import { CreateUserDto, UpdateUserDto } from "./dto/create-user.dto";
 import * as bcrypt from "bcryptjs";
 import { Order } from "../order/order.model";
 import { ROLES } from "src/libs/constants";
@@ -58,7 +57,7 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(userDto: updateUserDto, id: number) {
+  async updateUser(userDto: UpdateUserDto, id: number) {
     const { password, name, image } = userDto;
     const user = await User.findByPk(id);
     if (!user) {
