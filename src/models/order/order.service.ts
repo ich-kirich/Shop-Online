@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateOrderDto, UpdateOrderDto } from "./dto/create-order.dto";
 import { Order } from "./order.model";
@@ -13,6 +13,8 @@ export class OrderService {
     @InjectModel(Product) private productRepository: typeof Product,
   ) {}
 
+  private readonly logger = new Logger(OrderService.name);
+
   async create(dto: CreateOrderDto) {
     const { products } = dto;
     let totalPrice = 0;
@@ -22,6 +24,7 @@ export class OrderService {
     });
 
     if (productsInfo.length !== products.length) {
+      this.logger.error(`Error getting products: ${productsInfo}`);
       throw new Error("Some products were not found");
     }
 
@@ -45,12 +48,15 @@ export class OrderService {
           price: productInfo.price,
         });
       } catch (error) {
+        this.logger.error(
+          `Error adding product with this id: ${productInfo.id} to order`,
+        );
         throw new Error(
           `Failed to add product with this id: ${productInfo.id} to order`,
         );
       }
     }
-
+    this.logger.log(`Order created: ${order.id}`);
     return order;
   }
   async getOrdersByUserId(id: number) {
@@ -73,10 +79,14 @@ export class OrderService {
           },
         ],
       });
-
+      this.logger.log(
+        `Fetched ${orders.length} orders of user with this id: ${id}`,
+      );
       return orders;
     } catch (error) {
-      console.error("Error fetching orders by user id:", error);
+      this.logger.error(
+        `Error fetching orders by user id: ${id}: ${error.message}`,
+      );
       throw new Error("Failed to fetch orders by user id");
     }
   }
@@ -87,6 +97,7 @@ export class OrderService {
       where: { userId, number },
     });
     if (!order) {
+      this.logger.error(`Order with number ${number} not found`);
       throw new NotFoundException(`Order with number ${number} not found`);
     }
 
@@ -101,6 +112,7 @@ export class OrderService {
         const productInfo = await this.productRepository.findByPk(product.id);
 
         if (!productInfo) {
+          this.logger.error(`Product with id ${product.id} not found`);
           throw new NotFoundException(
             `Product with id ${product.id} not found`,
           );
@@ -114,6 +126,9 @@ export class OrderService {
             price: productInfo.price,
           });
         } catch (error) {
+          this.logger.error(
+            `Failed to add product with this id: ${product.id} to order`,
+          );
           throw new Error(
             `Failed to add product with this id: ${product.id} to order`,
           );
@@ -122,6 +137,7 @@ export class OrderService {
       order.price = totalPrice;
       await order.save();
     }
+    this.logger.log(`Order with this id: ${order.id} was successfully updated`);
     return order;
   }
 
@@ -132,6 +148,7 @@ export class OrderService {
       });
 
       if (!order) {
+        this.logger.error(`Order with this number ${number} not found`);
         throw new NotFoundException(
           `Order with this number ${number} not found`,
         );
@@ -143,6 +160,7 @@ export class OrderService {
         });
 
         if (deletedOrder === 0) {
+          this.logger.error(`Error deleting order with this number: ${number}`);
           throw new Error("Order not found");
         }
 
@@ -155,9 +173,10 @@ export class OrderService {
     });
 
     if (deletedOrder === 0) {
+      this.logger.error(`Error deleting order with this number: ${number}`);
       throw new Error("Order not found");
     }
-
+    this.logger.log(`Order with this number: ${number} was successfully deleted`);
     return { success: true };
   }
 }

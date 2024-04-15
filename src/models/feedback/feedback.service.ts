@@ -4,6 +4,7 @@ import {
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
 import { Feedback } from "./feedback.model";
@@ -17,15 +18,18 @@ export class FeedbackService {
     @InjectModel(Feedback) private feedbackRepository: typeof Feedback,
   ) {}
 
+  private readonly logger = new Logger(FeedbackService.name);
+
   async createFeedback(id: number, dto: CreateFeedbackDto) {
     try {
       const feedback = await this.feedbackRepository.create({
         ...dto,
         userId: id,
       });
+      this.logger.log(`Feedback created: ${feedback.id}`);
       return feedback;
     } catch (error) {
-      console.error("Error while creating feedback:", error);
+      this.logger.error(`Error creating feedback: ${error.message}`);
       throw new InternalServerErrorException({
         message: "Failed to create feedback",
       });
@@ -47,9 +51,10 @@ export class FeedbackService {
           },
         ],
       });
+      this.logger.log(`Fetched ${feedback.length} of user with this id: ${id}`);
       return feedback;
     } catch (error) {
-      console.error("Error while fetching feedback:", error);
+      this.logger.error(`Error fetching feedback of user with this id: ${id}: ${error.message}`);
       throw new InternalServerErrorException({
         message: "Failed to fetch feedback",
       });
@@ -67,9 +72,10 @@ export class FeedbackService {
           },
         ],
       });
+      this.logger.log(`Fetched ${feedback.length} of product with this id: ${id}`);
       return feedback;
     } catch (error) {
-      console.error("Error while fetching feedback by product ID:", error);
+      this.logger.error(`Error fetching feedback of product with this id: ${id}: ${error.message}`);
       throw new InternalServerErrorException({
         message: "Failed to fetch feedback by product ID",
       });
@@ -80,9 +86,11 @@ export class FeedbackService {
     const { feedbackId, newGrade, newText } = feedbackDto;
     const feedback = await Feedback.findByPk(feedbackId);
     if (!feedback) {
+      this.logger.error(`Feedback with id ${id} not found`);
       throw new NotFoundException("Feedback not found");
     }
     if (id !== feedback.userId) {
+      this.logger.error(`The user with this id: ${id}, does not have permissions to modify this comment`);
       throw new ForbiddenException(
         "The user does not have permissions to modify this comment.",
       );
@@ -94,6 +102,7 @@ export class FeedbackService {
       feedback.text = newText;
     }
     await feedback.save();
+    this.logger.log(`Feedback with this id: ${feedback.id} was successfully updated`);
     return feedback;
   }
 
@@ -103,6 +112,7 @@ export class FeedbackService {
         where: { id },
       });
       if (!feedback) {
+        this.logger.error(`Feedback with id ${id} not found`);
         throw new NotFoundException(`Feedback with id ${id} not found`);
       }
     }
@@ -111,9 +121,10 @@ export class FeedbackService {
     });
 
     if (deletedFeedback === 0) {
+      this.logger.error(`Feedback with id ${id} not found`);
       throw new NotFoundException(`Feedback with id ${id} not found`);
     }
-
+    this.logger.log(`Feedback with this id: ${id} was successfully deleted`);
     return { success: true };
   }
 }

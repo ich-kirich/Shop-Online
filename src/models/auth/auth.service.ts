@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  Logger,
   UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
@@ -19,12 +20,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  private readonly logger = new Logger(AuthService.name);
+
   async login(userDto: LoginUserDto) {
     try {
       const user = await this.validateUser(userDto);
+      this.logger.log(`User with this id: ${user.id} logged in`);
       return this.generateToken(user);
     } catch (error) {
-      console.error("Error during user validation:", error);
+      this.logger.error(`Error during user validation: ${error.message}`);
       throw new UnauthorizedException("Invalid email or password");
     }
   }
@@ -32,6 +36,9 @@ export class AuthService {
   async registration(userDto: CreateUserDto) {
     const candidate = await this.userService.getUserByEmail(userDto.email);
     if (candidate) {
+      this.logger.error(
+        `A user with this email: ${userDto.email} already exists`,
+      );
       throw new HttpException(
         "A user with this email already exists",
         HttpStatus.BAD_REQUEST,
@@ -43,9 +50,10 @@ export class AuthService {
         ...userDto,
         password: hashPassword,
       });
+      this.logger.log(`User with this id: ${user.id} was registered`);
       return this.generateToken(user);
     } catch (error) {
-      console.error("Error during user registration:", error);
+      this.logger.error(`Error during user registration: ${error.message}`);
       throw new InternalServerErrorException(error);
     }
   }
@@ -54,11 +62,11 @@ export class AuthService {
     try {
       const { id, email, password, role } = user;
       const payload = { id, email, password, role };
-      return {
-        token: this.jwtService.sign(payload),
-      };
+      const token = this.jwtService.sign(payload);
+      this.logger.log(`Token was created for this user with this id: ${id}`);
+      return { token };
     } catch (error) {
-      console.error("Error during token generation:", error);
+      this.logger.error(`Error during token generation for user with this id: ${user.id}: ${error.message}`);
       throw new InternalServerErrorException("Failed to generate token");
     }
   }
@@ -66,6 +74,7 @@ export class AuthService {
   private async validateUser(userDto: LoginUserDto) {
     const user = await this.userService.getUserByEmail(userDto.email);
     if (!user) {
+      this.logger.error(`User with email ${userDto.email} not found`);
       throw new UnauthorizedException({ message: "User not found" });
     }
     const passwordEquals = await bcrypt.compare(
@@ -73,8 +82,10 @@ export class AuthService {
       user.password,
     );
     if (!passwordEquals) {
+      this.logger.error(`This password: ${userDto.password} invalid`);
       throw new UnauthorizedException({ message: "Invalid password" });
     }
+    this.logger.log(`User with this id: ${user.id} has been successfully validated`);
     return user;
   }
 }
