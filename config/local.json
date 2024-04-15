@@ -4,5 +4,8 @@
   },
   "jwt": {
     "secretKey": "bababooey"
+  },
+  "imageStorage": {
+    "apiKey": "d94f9fe364dbc4d949d29916692a46bf"
   }
 }

@@ -9,5 +9,11 @@
     "port": "PORT",
     "dialect": "DIALECT",
     "password": "PASSWORD"
+  },
+  "jwt": {
+    "secretKey": "SECRET_KEY"
+  },
+  "imageStorage": {
+    "apiKey": "API_KEY"
   }
 }

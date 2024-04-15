@@ -3,10 +3,11 @@ import {
   Controller,
   Delete,
   Get,
-  Logger,
   Post,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
 import { Request } from "express";
 import { CreateUserDto, UpdateUserDto } from "./dto/create-user.dto";
@@ -18,6 +19,7 @@ import { RolesGuard } from "src/models/auth/roles.guard";
 import { roles } from "src/models/auth/roles-auth.decorator";
 import { JwtService } from "@nestjs/jwt";
 import { ROLES } from "src/libs/constants";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @ApiTags("Users")
 @Controller("users")
@@ -67,15 +69,20 @@ export class UsersController {
   @ApiResponse({ status: 200, type: User })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.ADMIN, ROLES.USER)
+  @UseInterceptors(FileInterceptor("imageFile"))
   @Post("/update")
-  updateUser(@Req() req: Request, @Body() userDto: UpdateUserDto) {
+  updateUser(
+    @Req() req: Request,
+    @Body() userDto?: UpdateUserDto,
+    @UploadedFile() imageFile?: Express.Multer.File,
+  ) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
     let userId = Number(decodedToken.id);
     if (decodedToken.role === ROLES.ADMIN) {
       userId = Number(userDto.userId);
     }
-    return this.userService.updateUser(userDto, userId);
+    return this.userService.updateUser(userDto, userId, imageFile);
   }
 
   @ApiOperation({ summary: "Delete User Profile" })

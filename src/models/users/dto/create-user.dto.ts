@@ -43,9 +43,4 @@ export class UpdateUserDto {
   @IsString({ message: "Name should be a string" })
   @IsOptional()
   readonly name: string;
-
-  @ApiProperty({ example: "link to image", description: "Image" })
-  @IsString({ message: "Image should be a string" })
-  @IsOptional()
-  readonly image: string;
 }

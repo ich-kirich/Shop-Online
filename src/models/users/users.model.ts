@@ -3,7 +3,7 @@ import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { Feedback } from "../feedback/feedback.model";
 import { Order } from "../order/order.model";
 import { IUserCreationAttrs } from "src/types/types";
-import { ROLES, UNKNOWN } from "src/libs/constants";
+import { DEFAULT_IMAGE, ROLES, UNKNOWN } from "src/libs/constants";
 
 @Table({ tableName: "users" })
 export class User extends Model<User, IUserCreationAttrs> {
@@ -50,7 +50,7 @@ export class User extends Model<User, IUserCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: UNKNOWN,
+    defaultValue: DEFAULT_IMAGE.USER_IMAGE,
   })
   image: string;
 
