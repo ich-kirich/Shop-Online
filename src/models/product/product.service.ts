@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { Product } from "./product.model";
 import { CreateProductDto, UpdateProductDto } from "./dto/create-product.dto";
@@ -11,12 +11,15 @@ export class ProductService {
     @InjectModel(Feedback) private feedbackRepository: typeof Feedback,
   ) {}
 
+  private readonly logger = new Logger(ProductService.name);
+
   async create(dto: CreateProductDto) {
     try {
       const product = await this.productRepository.create(dto);
+      this.logger.log(`Product created: ${product.id}`);
       return product;
     } catch (error) {
-      console.error("Error creating product:", error);
+      this.logger.error(`Error creating product: ${error.message}`);
       throw new Error("Failed to create product");
     }
   }
@@ -31,9 +34,10 @@ export class ProductService {
           },
         ],
       });
+      this.logger.log(`Product with this id: ${product.id} was received`);
       return product;
     } catch (error) {
-      console.error("Error fetching product by ID:", error);
+      this.logger.error(`Error fetcthing product by ID: ${error.message}`);
       throw new Error("Failed to fetch product by ID");
     }
   }
@@ -48,9 +52,11 @@ export class ProductService {
     });
 
     if (deletedProduct === 0) {
+      this.logger.error(`Error deleting product with this id: ${id}`);
       throw new Error("Product not found");
     }
 
+    this.logger.log(`Product with this id: ${id} was successfully deleted`);
     return { success: true };
   }
 
@@ -59,6 +65,7 @@ export class ProductService {
       productDto;
     const product = await Product.findByPk(id);
     if (!product) {
+      this.logger.error(`Error updating product with this id: ${id}`);
       throw new Error("Product not found");
     }
     if (name !== undefined) {
@@ -84,6 +91,7 @@ export class ProductService {
     }
 
     await product.save();
+    this.logger.log(`Product with this id: ${product.id} was successfully updated`);
     return product;
   }
 }

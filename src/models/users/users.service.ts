@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { User } from "./users.model";
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateUserDto, UpdateUserDto } from "./dto/create-user.dto";
@@ -10,12 +10,15 @@ import { ROLES } from "src/libs/constants";
 export class UsersService {
   constructor(@InjectModel(User) private userRepository: typeof User) {}
 
+  private readonly logger = new Logger(UsersService.name);
+
   async createUser(dto: CreateUserDto) {
     try {
       const user = await this.userRepository.create(dto);
+      this.logger.log(`User created: ${user.id}`);
       return user;
     } catch (error) {
-      console.error("Error creating user:", error);
+      this.logger.error(`Error creating user: ${error.message}`);
       throw new Error("Failed to create user");
     }
   }
@@ -23,9 +26,10 @@ export class UsersService {
   async getAllUsers() {
     try {
       const users = await this.userRepository.findAll();
+      this.logger.log(`Fetched ${users.length} users`);
       return users;
     } catch (error) {
-      console.error("Error fetching all users:", error);
+      this.logger.error(`Error fetching all users: ${error.message}`);
       throw new Error("Failed to fetch all users");
     }
   }
@@ -35,9 +39,12 @@ export class UsersService {
       const user = await this.userRepository.findOne({
         where: { email },
       });
+      this.logger.log(`Fetched user with this id: ${user.id}`);
       return user;
     } catch (error) {
-      console.error(`Error fetching user by email ${email}:`, error);
+      this.logger.error(
+        `Error fetching user by email ${email}: ${error.message}`,
+      );
       throw new Error(`Failed to fetch user by email ${email}`);
     }
   }
@@ -52,8 +59,10 @@ export class UsersService {
       });
     }
     if (!user) {
+      this.logger.error(`Error fetching user with this id: ${id}`);
       throw new Error("User not found");
     }
+    this.logger.log(`Fetched user with this id: ${user.id}`);
     return user;
   }
 
@@ -61,6 +70,7 @@ export class UsersService {
     const { password, name, image } = userDto;
     const user = await User.findByPk(id);
     if (!user) {
+      this.logger.error(`Error updating user with this id: ${id}`);
       throw new Error("User not found");
     }
     if (password !== undefined) {
@@ -74,6 +84,7 @@ export class UsersService {
       user.image = image;
     }
     await user.save();
+    this.logger.log(`User with this id: ${user.id} was successfully updated`);
     return user;
   }
 
@@ -81,6 +92,7 @@ export class UsersService {
     if (id === userId || role === ROLES.ADMIN) {
       const user = await this.userRepository.findByPk(id);
       if (!user) {
+        this.logger.error(`Error deleting user with this id: ${id}`);
         throw new Error("User not found");
       }
       await Order.destroy({
@@ -89,9 +101,10 @@ export class UsersService {
       const deletedUser = await this.userRepository.destroy({
         where: { id },
       });
-
+      this.logger.log(`User with this id: ${id} was successfully deleted`);
       return { success: true };
     }
+    this.logger.error(`User with this id: ${id} has no rights to delete User`);
     throw new Error("User has no rights to delete User");
   }
 }

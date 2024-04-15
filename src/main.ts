@@ -3,15 +3,19 @@ import { AppModule } from "./app.module";
 import { ValidationPipe } from "./pipes/validation.pipe";
 import { CONFIG_SWAGGER, PATH_TO_SWAGGER, PORT } from "./libs/constants";
 import { SwaggerModule } from "@nestjs/swagger";
+import { Logger } from "@nestjs/common";
 
 async function start() {
+  const logger = new Logger("App");
+
   try {
     const app = await NestFactory.create(AppModule);
     const documentSwagger = SwaggerModule.createDocument(app, CONFIG_SWAGGER);
     SwaggerModule.setup(PATH_TO_SWAGGER, app, documentSwagger);
     app.useGlobalPipes(new ValidationPipe());
-    await app.listen(PORT, () => console.log(`Server started on ${PORT}`));
+    await app.listen(PORT, () => logger.log(`Server started on port ${PORT}`));
   } catch (error) {
+    logger.error(`Error starting the server: ${error}`);
     throw new Error(error);
   }
 }
