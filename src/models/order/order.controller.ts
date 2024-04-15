@@ -8,13 +8,12 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { OrderService } from "./order.service";
-import { CreateOrderDto } from "./dto/create-order.dto";
+import { CreateOrderDto, UpdateOrderDto } from "./dto/create-order.dto";
 import { JwtAuthGuard } from "src/models/auth/jwt-auth.guard";
 import { RolesGuard } from "src/models/auth/roles.guard";
 import { roles } from "src/models/auth/roles-auth.decorator";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
-import { updateOrderDto } from "src/types/types";
 import { Order } from "./order.model";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ROLES } from "src/libs/constants";
@@ -56,7 +55,7 @@ export class OrderController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.ADMIN, ROLES.USER)
   @Post("/update")
-  updateOrder(@Req() req: Request, @Body() dto: updateOrderDto) {
+  updateOrder(@Req() req: Request, @Body() dto: UpdateOrderDto) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = this.jwtService.decode(token);
     let userId = Number(decodedToken.id);

@@ -1,5 +1,5 @@
 import { InjectModel } from "@nestjs/sequelize";
-import { CreateFeedbackDto } from "./dto/create-feedback.dto";
+import { CreateFeedbackDto, UpdateFeedbackDto } from "./dto/create-feedback.dto";
 import {
   ForbiddenException,
   Injectable,
@@ -7,7 +7,6 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Feedback } from "./feedback.model";
-import { updateFeedbackDto } from "src/types/types";
 import { Product } from "../product/product.model";
 import { User } from "../users/users.model";
 import { ROLES } from "src/libs/constants";
@@ -77,7 +76,7 @@ export class FeedbackService {
     }
   }
 
-  async updateFeedback(id: number, feedbackDto: updateFeedbackDto) {
+  async updateFeedback(id: number, feedbackDto: UpdateFeedbackDto) {
     const { feedbackId, newGrade, newText } = feedbackDto;
     const feedback = await Feedback.findByPk(feedbackId);
     if (!feedback) {

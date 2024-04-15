@@ -1,10 +1,9 @@
 import { Body, Controller, Delete, Get, Post, UseGuards } from "@nestjs/common";
 import { ProductService } from "./product.service";
-import { CreateProductDto } from "./dto/create-product.dto";
+import { CreateProductDto, UpdateProductDto } from "./dto/create-product.dto";
 import { JwtAuthGuard } from "src/models/auth/jwt-auth.guard";
 import { roles } from "src/models/auth/roles-auth.decorator";
 import { RolesGuard } from "src/models/auth/roles.guard";
-import { updateProductDto } from "src/types/types";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Product } from "./product.model";
 import { ROLES } from "src/libs/constants";
@@ -28,7 +27,7 @@ export class ProductController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.ADMIN)
   @Post("/update")
-  updateProduct(@Body() dto: updateProductDto) {
+  updateProduct(@Body() dto: UpdateProductDto) {
     return this.productService.updateProduct(dto);
   }
 
@@ -40,7 +39,6 @@ export class ProductController {
   deleteProductById(@Body() requestBody: { id: number }) {
     return this.productService.deleteProductById(requestBody.id);
   }
-
 
   @ApiOperation({ summary: "Get Product by Id" })
   @ApiResponse({ status: 200, type: Product })

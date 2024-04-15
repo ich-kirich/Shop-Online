@@ -1,9 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { CreateOrderDto } from "./dto/create-order.dto";
+import { CreateOrderDto, UpdateOrderDto } from "./dto/create-order.dto";
 import { Order } from "./order.model";
 import { OrderProduct } from "src/models/order-product.model";
-import { updateOrderDto } from "src/types/types";
 import { Product } from "../product/product.model";
 import { ORDER_STATUSES, ROLES } from "src/libs/constants";
 
@@ -82,7 +81,7 @@ export class OrderService {
     }
   }
 
-  async updateOrder(userId: number, orderDto: updateOrderDto) {
+  async updateOrder(userId: number, orderDto: UpdateOrderDto) {
     const { adress, products, number } = orderDto;
     const order = await this.orderRepository.findOne({
       where: { userId, number },
