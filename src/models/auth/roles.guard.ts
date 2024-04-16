@@ -7,7 +7,6 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
-import { Observable } from "rxjs";
 import { ROLES_KEY } from "./roles-auth.decorator";
 
 @Injectable()
@@ -19,9 +18,7 @@ export class RolesGuard implements CanActivate {
 
   private readonly logger = new Logger(RolesGuard.name);
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     try {
       const requiredRoles = this.reflector.getAllAndOverride(ROLES_KEY, [
         context.getHandler(),

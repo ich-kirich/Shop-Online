@@ -1,18 +1,6 @@
-import { DocumentBuilder } from "@nestjs/swagger";
-import config from "config";
-
 export const PATH_TO_SWAGGER = "/api/docs";
 
-export const CONFIG_SWAGGER = new DocumentBuilder()
-  .setTitle("Tree Shop")
-  .setDescription("Online lumber retailer")
-  .setVersion("1.0.0")
-  .addTag("Shop")
-  .build();
-
-export const UNKNOWN = "Unknown";
-
-export const SPARE_SECRET_KEY = "SPARE_SECRET_KEY";
+export const UNKNOWN_VALUE = "Unknown";
 
 export enum DEFAULT_IMAGE {
   USER_IMAGE = "https://i.ibb.co/1XsL5vV/2024-04-15-122726464.png",
@@ -26,6 +14,19 @@ export enum DB {
   USERNAME = "db.username",
   PASSWORD = "db.password",
   DATABASE = "db.database",
+}
+
+export enum SERVER {
+  PORT = "server.port",
+}
+
+export enum JWT {
+  SECRET_KEY = "jwt.secretKey",
+  EXPIRES_IN = "jwt.expiresIn",
+}
+
+export enum IMAGE_STORAGE {
+  API_KEY = "imageStorage.apiKey",
 }
 
 export enum ROLES {

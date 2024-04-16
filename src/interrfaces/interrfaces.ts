@@ -1,3 +1,5 @@
+import { User } from "src/models/users/users.model";
+
 export interface IOrderProduct {
   id: number;
   quantity: number;
@@ -28,4 +30,8 @@ export interface IFeedbackCreationAttrs {
   grade: number;
   userId: number;
   productId: number;
+}
+
+export interface RequestWithUser extends Request {
+  user?: User;
 }

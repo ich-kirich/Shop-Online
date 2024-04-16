@@ -68,30 +68,20 @@ export class ProductService {
       this.logger.error(`Error updating product with this id: ${id}`);
       throw new Error("Product not found");
     }
-    if (name !== undefined) {
-      product.name = name;
-    }
-    if (type !== undefined) {
-      product.type = type;
-    }
-    if (size !== undefined) {
-      product.size = size;
-    }
-    if (price !== undefined) {
-      product.price = price;
-    }
-    if (quantity !== undefined) {
-      product.quantity = quantity;
-    }
-    if (image !== undefined) {
-      product.image = image;
-    }
-    if (description !== undefined) {
-      product.description = description;
-    }
+
+    product.name = name !== undefined ? name : product.name;
+    product.type = type !== undefined ? type : product.type;
+    product.size = size !== undefined ? size : product.size;
+    product.price = price !== undefined ? price : product.price;
+    product.quantity = quantity !== undefined ? quantity : product.quantity;
+    product.image = image !== undefined ? image : product.image;
+    product.description =
+      description !== undefined ? description : product.description;
 
     await product.save();
-    this.logger.log(`Product with this id: ${product.id} was successfully updated`);
+    this.logger.log(
+      `Product with this id: ${product.id} was successfully updated`,
+    );
     return product;
   }
 }

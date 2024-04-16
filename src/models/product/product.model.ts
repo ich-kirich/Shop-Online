@@ -10,8 +10,8 @@ import {
 import { OrderProduct } from "src/models/order-product.model";
 import { Feedback } from "../feedback/feedback.model";
 import { Order } from "../order/order.model";
-import { IProductCreationAttrs } from "src/types/types";
-import { DEFAULT_IMAGE, UNKNOWN } from "src/libs/constants";
+import { IProductCreationAttrs } from "src/interrfaces/interrfaces";
+import { DEFAULT_IMAGE, UNKNOWN_VALUE } from "src/libs/constants";
 
 @Table({ tableName: "product" })
 export class Product extends Model<Product, IProductCreationAttrs> {
@@ -35,7 +35,7 @@ export class Product extends Model<Product, IProductCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: UNKNOWN,
+    defaultValue: UNKNOWN_VALUE,
   })
   type: string;
 
@@ -43,7 +43,7 @@ export class Product extends Model<Product, IProductCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: UNKNOWN,
+    defaultValue: UNKNOWN_VALUE,
   })
   size: string;
 
@@ -76,7 +76,7 @@ export class Product extends Model<Product, IProductCreationAttrs> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    defaultValue: UNKNOWN,
+    defaultValue: UNKNOWN_VALUE,
   })
   description: string;
 

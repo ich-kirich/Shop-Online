@@ -11,7 +11,7 @@ import {
 import { OrderProduct } from "src/models/order-product.model";
 import { Product } from "../product/product.model";
 import { User } from "../users/users.model";
-import { IOrderCreationAttrs } from "src/types/types";
+import { IOrderCreationAttrs } from "src/interrfaces/interrfaces";
 import { ORDER_STATUSES } from "src/libs/constants";
 
 @Table({ tableName: "order" })

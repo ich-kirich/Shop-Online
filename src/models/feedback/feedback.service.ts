@@ -1,5 +1,8 @@
 import { InjectModel } from "@nestjs/sequelize";
-import { CreateFeedbackDto, UpdateFeedbackDto } from "./dto/create-feedback.dto";
+import {
+  CreateFeedbackDto,
+  UpdateFeedbackDto,
+} from "./dto/create-feedback.dto";
 import {
   ForbiddenException,
   Injectable,
@@ -54,7 +57,9 @@ export class FeedbackService {
       this.logger.log(`Fetched ${feedback.length} of user with this id: ${id}`);
       return feedback;
     } catch (error) {
-      this.logger.error(`Error fetching feedback of user with this id: ${id}: ${error.message}`);
+      this.logger.error(
+        `Error fetching feedback of user with this id: ${id}: ${error.message}`,
+      );
       throw new InternalServerErrorException({
         message: "Failed to fetch feedback",
       });
@@ -72,10 +77,14 @@ export class FeedbackService {
           },
         ],
       });
-      this.logger.log(`Fetched ${feedback.length} of product with this id: ${id}`);
+      this.logger.log(
+        `Fetched ${feedback.length} of product with this id: ${id}`,
+      );
       return feedback;
     } catch (error) {
-      this.logger.error(`Error fetching feedback of product with this id: ${id}: ${error.message}`);
+      this.logger.error(
+        `Error fetching feedback of product with this id: ${id}: ${error.message}`,
+      );
       throw new InternalServerErrorException({
         message: "Failed to fetch feedback by product ID",
       });
@@ -90,19 +99,19 @@ export class FeedbackService {
       throw new NotFoundException("Feedback not found");
     }
     if (id !== feedback.userId) {
-      this.logger.error(`The user with this id: ${id}, does not have permissions to modify this comment`);
+      this.logger.error(
+        `The user with this id: ${id}, does not have permissions to modify this comment`,
+      );
       throw new ForbiddenException(
         "The user does not have permissions to modify this comment.",
       );
     }
-    if (newGrade !== undefined) {
-      feedback.grade = newGrade;
-    }
-    if (newText !== undefined) {
-      feedback.text = newText;
-    }
+    feedback.grade = newGrade !== undefined ? newGrade : feedback.grade;
+    feedback.text = newText !== undefined ? newText : feedback.text;
     await feedback.save();
-    this.logger.log(`Feedback with this id: ${feedback.id} was successfully updated`);
+    this.logger.log(
+      `Feedback with this id: ${feedback.id} was successfully updated`,
+    );
     return feedback;
   }
 

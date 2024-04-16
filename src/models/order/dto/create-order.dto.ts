@@ -7,7 +7,7 @@ import {
   IsString,
   ValidateNested,
 } from "class-validator";
-import { IOrderProduct } from "src/types/types";
+import { IOrderProduct } from "src/interrfaces/interrfaces";
 
 class OrderProductDto {
   @ApiProperty({ example: 1, description: "Product ID" })

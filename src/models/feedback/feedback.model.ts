@@ -9,7 +9,7 @@ import {
 } from "sequelize-typescript";
 import { User } from "../users/users.model";
 import { Product } from "../product/product.model";
-import { IFeedbackCreationAttrs } from "src/types/types";
+import { IFeedbackCreationAttrs } from "src/interrfaces/interrfaces";
 
 @Table({ tableName: "feedback" })
 export class Feedback extends Model<Feedback, IFeedbackCreationAttrs> {

@@ -7,34 +7,32 @@ import {
   Req,
   UseGuards,
 } from "@nestjs/common";
-import { Request } from "express";
-import { CreateFeedbackDto, UpdateFeedbackDto } from "./dto/create-feedback.dto";
+import {
+  CreateFeedbackDto,
+  UpdateFeedbackDto,
+} from "./dto/create-feedback.dto";
 import { FeedbackService } from "./feedback.service";
 import { JwtAuthGuard } from "src/models/auth/jwt-auth.guard";
 import { roles } from "src/models/auth/roles-auth.decorator";
 import { RolesGuard } from "src/models/auth/roles.guard";
-import { JwtService } from "@nestjs/jwt";
 import { Feedback } from "./feedback.model";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ROLES } from "src/libs/constants";
+import { RequestWithUser } from "src/interrfaces/interrfaces";
 
 @ApiTags("Feedback")
 @Controller("feedback")
 export class FeedbackController {
-  constructor(
-    private feedbackService: FeedbackService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private feedbackService: FeedbackService) {}
 
   @ApiOperation({ summary: "Feedback Creation" })
   @ApiResponse({ status: 200, type: Feedback })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.USER)
   @Post()
-  createFeedback(@Req() req: Request, @Body() dto: CreateFeedbackDto) {
-    const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = this.jwtService.decode(token);
-    return this.feedbackService.createFeedback(decodedToken.id, dto);
+  createFeedback(@Req() req: RequestWithUser, @Body() dto: CreateFeedbackDto) {
+    const user = req.user;
+    return this.feedbackService.createFeedback(user.id, dto);
   }
 
   @ApiOperation({ summary: "Update Feedback" })
@@ -42,10 +40,9 @@ export class FeedbackController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.USER)
   @Post("/update")
-  updateFeedback(@Req() req: Request, @Body() dto: UpdateFeedbackDto) {
-    const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = this.jwtService.decode(token);
-    return this.feedbackService.updateFeedback(decodedToken.id, dto);
+  updateFeedback(@Req() req: RequestWithUser, @Body() dto: UpdateFeedbackDto) {
+    const user = req.user;
+    return this.feedbackService.updateFeedback(user.id, dto);
   }
 
   @ApiOperation({ summary: "Get user feedback" })
@@ -67,12 +64,8 @@ export class FeedbackController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.ADMIN, ROLES.USER)
   @Delete("/delete")
-  deleteFeedback(@Req() req: Request, @Body() requestBody: { id: number }) {
-    const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = this.jwtService.decode(token);
-    return this.feedbackService.deleteFeedbackById(
-      requestBody.id,
-      decodedToken.role,
-    );
+  deleteFeedback(@Req() req: RequestWithUser, @Body() requestBody: { id: number }) {
+    const user = req.user;
+    return this.feedbackService.deleteFeedbackById(requestBody.id, user.role);
   }
 }

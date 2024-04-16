@@ -5,11 +5,14 @@ import { CreateUserDto, UpdateUserDto } from "./dto/create-user.dto";
 import * as bcrypt from "bcryptjs";
 import { Order } from "../order/order.model";
 import { ROLES } from "src/libs/constants";
-import { uploadImage } from "src/libs/utils";
+import { ImageService } from "src/libs/uploadImageApi";
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User) private userRepository: typeof User) {}
+  constructor(
+    @InjectModel(User) private userRepository: typeof User,
+    private readonly imageService: ImageService,
+  ) {}
 
   private readonly logger = new Logger(UsersService.name);
 
@@ -67,7 +70,11 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(userDto: UpdateUserDto, id: number, image?: Express.Multer.File) {
+  async updateUser(
+    userDto: UpdateUserDto,
+    id: number,
+    image?: Express.Multer.File,
+  ) {
     const { password, name } = userDto;
     const user = await User.findByPk(id);
     if (!user) {
@@ -82,7 +89,7 @@ export class UsersService {
       user.name = name;
     }
     if (image !== undefined) {
-      const loadImage = await uploadImage(image);
+      const loadImage = await this.imageService.uploadImage(image);
       await User.update({ image: loadImage }, { where: { id: user.id } });
     }
     await user.save();

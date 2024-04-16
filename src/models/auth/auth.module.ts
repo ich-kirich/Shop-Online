@@ -4,7 +4,7 @@ import { AuthService } from "./auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import config from "config";
 import { UsersModule } from "../users/users.module";
-import { SPARE_SECRET_KEY } from "src/libs/constants";
+import { JWT } from "src/libs/constants";
 
 @Module({
   controllers: [AuthController],
@@ -12,12 +12,12 @@ import { SPARE_SECRET_KEY } from "src/libs/constants";
   imports: [
     forwardRef(() => UsersModule),
     JwtModule.register({
-      secret: config.get("jwt.secretKey") || SPARE_SECRET_KEY,
+      secret: config.get(JWT.SECRET_KEY),
       signOptions: {
-        expiresIn: "24h",
+        expiresIn: config.get(JWT.EXPIRES_IN),
       },
     }),
   ],
-  exports: [AuthService, JwtModule]
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
