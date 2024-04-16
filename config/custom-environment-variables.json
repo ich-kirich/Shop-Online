@@ -1,19 +1,19 @@
 {
   "server": {
-    "port": "PORT"
+    "port": "SERVER_PORT"
   },
   "db": {
-    "database": "DATABASE",
-    "username": "USER",
-    "host": "HOST",
-    "port": "PORT",
-    "dialect": "DIALECT",
-    "password": "PASSWORD"
+    "database": "DB_DATABASE",
+    "username": "DB_USER",
+    "host": "DB_HOST",
+    "port": "DB_PORT",
+    "dialect": "DB_DIALECT",
+    "password": "DB_PASSWORD"
   },
   "jwt": {
-    "secretKey": "SECRET_KEY"
+    "secretKey": "JWT_SECRET_KEY"
   },
   "imageStorage": {
-    "apiKey": "API_KEY"
+    "apiKey": "IMAGE_API_KEY"
   }
 }
