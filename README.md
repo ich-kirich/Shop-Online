@@ -10,3 +10,6 @@ This is a server for an online store, with the ability to register users and adm
 ***
 ## Technology stack
 - Backend: Nest.js, Express.js, Typescript, PostgreSQL, Sequalize ORM, Docker, Swagger, Node Config, Prettier, Eslint, Postman, Axios, Bcrypt, Rxjs,  Class Transformer, Class Validator, Uuid, Mime-types, Form Data
+- NodeJS version: 20.11.0
+- Npm version: 10.2.4
+- PostgreSQL version: 16.2
