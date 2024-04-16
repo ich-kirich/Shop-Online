@@ -2,7 +2,7 @@ import { DocumentBuilder } from "@nestjs/swagger";
 import config from "config";
 
 export const PATH_TO_SWAGGER = "/api/docs";
-export const PORT = Number(config.get("server.port")) || 5000;
+
 export const CONFIG_SWAGGER = new DocumentBuilder()
   .setTitle("Tree Shop")
   .setDescription("Online lumber retailer")
