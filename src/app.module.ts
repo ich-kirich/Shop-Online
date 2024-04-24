@@ -11,7 +11,7 @@ import { Product } from "./models/product/product.model";
 import { ProductModule } from "./models/product/product.module";
 import { User } from "./models/users/users.model";
 import { UsersModule } from "./models/users/users.module";
-import { DB } from "./libs/constants";
+import { DB } from "./constants";
 
 @Module({
   controllers: [],
@@ -19,11 +19,11 @@ import { DB } from "./libs/constants";
   imports: [
     SequelizeModule.forRoot({
       dialect: config.get(DB.DIALECT),
-      host: String(config.get(DB.HOST)),
-      port: Number(config.get(DB.PORT)),
-      username: String(config.get(DB.USERNAME)),
-      password: String(config.get(DB.PASSWORD)),
-      database: String(config.get(DB.DATABASE)),
+      host: config.get(DB.HOST),
+      port: config.get(DB.PORT),
+      username: config.get(DB.USERNAME),
+      password: config.get(DB.PASSWORD),
+      database: config.get(DB.DATABASE),
       models: [User, Feedback, Product, Order, OrderProduct],
       autoLoadModels: true,
     }),

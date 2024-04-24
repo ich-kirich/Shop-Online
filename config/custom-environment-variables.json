@@ -12,7 +12,7 @@
   },
   "jwt": {
     "secretKey": "JWT_SECRET_KEY",
-    "expiresIn": "EXPIRES_IN"
+    "expiresIn": "JWT_EXPIRES_IN"
   },
   "imageStorage": {
     "apiKey": "IMAGE_API_KEY"

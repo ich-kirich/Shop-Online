@@ -4,7 +4,7 @@ import { CreateOrderDto, UpdateOrderDto } from "./dto/create-order.dto";
 import { Order } from "./order.model";
 import { OrderProduct } from "src/models/order-product.model";
 import { Product } from "../product/product.model";
-import { ORDER_STATUSES, ROLES } from "src/libs/constants";
+import { ORDER_STATUSES, ROLES } from "src/constants";
 
 @Injectable()
 export class OrderService {

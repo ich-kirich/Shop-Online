@@ -17,8 +17,8 @@ import { roles } from "src/models/auth/roles-auth.decorator";
 import { RolesGuard } from "src/models/auth/roles.guard";
 import { Feedback } from "./feedback.model";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ROLES } from "src/libs/constants";
-import { RequestWithUser } from "src/interrfaces/interrfaces";
+import { ROLES } from "src/constants";
+import { IRequestWithUser } from "src/interrfaces/interrfaces";
 
 @ApiTags("Feedback")
 @Controller("feedback")
@@ -30,7 +30,7 @@ export class FeedbackController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.USER)
   @Post()
-  createFeedback(@Req() req: RequestWithUser, @Body() dto: CreateFeedbackDto) {
+  createFeedback(@Req() req: IRequestWithUser, @Body() dto: CreateFeedbackDto) {
     const user = req.user;
     return this.feedbackService.createFeedback(user.id, dto);
   }
@@ -40,7 +40,7 @@ export class FeedbackController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.USER)
   @Post("/update")
-  updateFeedback(@Req() req: RequestWithUser, @Body() dto: UpdateFeedbackDto) {
+  updateFeedback(@Req() req: IRequestWithUser, @Body() dto: UpdateFeedbackDto) {
     const user = req.user;
     return this.feedbackService.updateFeedback(user.id, dto);
   }
@@ -64,7 +64,7 @@ export class FeedbackController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @roles(ROLES.ADMIN, ROLES.USER)
   @Delete("/delete")
-  deleteFeedback(@Req() req: RequestWithUser, @Body() requestBody: { id: number }) {
+  deleteFeedback(@Req() req: IRequestWithUser, @Body() requestBody: { id: number }) {
     const user = req.user;
     return this.feedbackService.deleteFeedbackById(requestBody.id, user.role);
   }

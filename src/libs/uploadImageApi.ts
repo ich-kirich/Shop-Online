@@ -4,7 +4,7 @@ import config from "config";
 import { v4 as uuidv4 } from "uuid";
 import mime from "mime-types";
 import axios from "axios";
-import { IMAGE_STORAGE } from "./constants";
+import { IMAGE_STORAGE } from "../constants";
 
 @Injectable()
 export class ImageService {

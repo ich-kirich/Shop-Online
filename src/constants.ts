@@ -35,7 +35,7 @@ export enum ROLES {
 }
 
 export enum ORDER_STATUSES {
-  AWAITING_PROCESSING = "Awaiting processing by a specialist",
+  AWAITING_PROCESSING = "In progess",
   PROCESSED_BY_SPECIALIST = "Handling by a specialist",
   PENDING_PAYMENT = "Pending payment",
   DELIVERY_PROCESS = "In the delivery process",

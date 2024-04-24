@@ -15,3 +15,13 @@ export class LoginUserDto {
   })
   readonly password: string;
 }
+
+export class ResultAuthorizationDto {
+  @ApiProperty({
+    example:
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1ZGlsc2hjaGlrQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDA1JFA1bUlDaTdWUVBuQVVhQ2hqUW9kaE9vYTBJUzE5QjNHMmg1WVVhVzVOcUVYQWlXRWtlZEdTIiwicm9sZSI6IkF123TUlOIiwiaWF0IjoxNzEzMjkyNTI2LCJleHAiOjE3MTMzNzg5MjZ9.x3YO0N8Td1yBLAIH5zNpM-6KKao5d65tMk67nrtJoak",
+    description: "Jwt token",
+  })
+  @IsString({ message: "Token should be a string" })
+  readonly token: string;
+}

@@ -14,7 +14,7 @@ import { RolesGuard } from "src/models/auth/roles.guard";
 import { roles } from "src/models/auth/roles-auth.decorator";
 import { Order } from "./order.model";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ROLES } from "src/libs/constants";
+import { ROLES } from "src/constants";
 import { RequestWithUser } from "src/interrfaces/interrfaces";
 
 @ApiTags("Orders")

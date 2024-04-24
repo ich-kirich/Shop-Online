@@ -3,7 +3,7 @@ import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { Feedback } from "../feedback/feedback.model";
 import { Order } from "../order/order.model";
 import { IUserCreationAttrs } from "src/interrfaces/interrfaces";
-import { DEFAULT_IMAGE, ROLES, UNKNOWN_VALUE } from "src/libs/constants";
+import { DEFAULT_IMAGE, ROLES, UNKNOWN_VALUE } from "src/constants";
 
 @Table({ tableName: "users" })
 export class User extends Model<User, IUserCreationAttrs> {

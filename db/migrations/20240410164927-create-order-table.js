@@ -31,7 +31,7 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: 'Awaiting processing by a specialist',
+        defaultValue: 'In progess',
       },
       userId: {
         type: Sequelize.INTEGER,

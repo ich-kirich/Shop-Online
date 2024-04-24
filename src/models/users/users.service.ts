@@ -4,7 +4,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { CreateUserDto, UpdateUserDto } from "./dto/create-user.dto";
 import * as bcrypt from "bcryptjs";
 import { Order } from "../order/order.model";
-import { ROLES } from "src/libs/constants";
+import { ROLES } from "src/constants";
 import { ImageService } from "src/libs/uploadImageApi";
 
 @Injectable()

@@ -32,6 +32,6 @@ export interface IFeedbackCreationAttrs {
   productId: number;
 }
 
-export interface RequestWithUser extends Request {
+export interface IRequestWithUser extends Request {
   user?: User;
 }

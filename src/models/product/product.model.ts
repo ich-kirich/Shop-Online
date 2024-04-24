@@ -11,7 +11,7 @@ import { OrderProduct } from "src/models/order-product.model";
 import { Feedback } from "../feedback/feedback.model";
 import { Order } from "../order/order.model";
 import { IProductCreationAttrs } from "src/interrfaces/interrfaces";
-import { DEFAULT_IMAGE, UNKNOWN_VALUE } from "src/libs/constants";
+import { DEFAULT_IMAGE, UNKNOWN_VALUE } from "src/constants";
 
 @Table({ tableName: "product" })
 export class Product extends Model<Product, IProductCreationAttrs> {

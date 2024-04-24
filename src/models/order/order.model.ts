@@ -12,7 +12,7 @@ import { OrderProduct } from "src/models/order-product.model";
 import { Product } from "../product/product.model";
 import { User } from "../users/users.model";
 import { IOrderCreationAttrs } from "src/interrfaces/interrfaces";
-import { ORDER_STATUSES } from "src/libs/constants";
+import { ORDER_STATUSES } from "src/constants";
 
 @Table({ tableName: "order" })
 export class Order extends Model<Order, IOrderCreationAttrs> {

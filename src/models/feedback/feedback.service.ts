@@ -13,7 +13,7 @@ import {
 import { Feedback } from "./feedback.model";
 import { Product } from "../product/product.model";
 import { User } from "../users/users.model";
-import { ROLES } from "src/libs/constants";
+import { ROLES } from "src/constants";
 
 @Injectable()
 export class FeedbackService {
@@ -93,18 +93,10 @@ export class FeedbackService {
 
   async updateFeedback(id: number, feedbackDto: UpdateFeedbackDto) {
     const { feedbackId, newGrade, newText } = feedbackDto;
-    const feedback = await Feedback.findByPk(feedbackId);
+    const feedback = await Feedback.findOne({ where: { id: feedbackId, userId: id } });
     if (!feedback) {
-      this.logger.error(`Feedback with id ${id} not found`);
-      throw new NotFoundException("Feedback not found");
-    }
-    if (id !== feedback.userId) {
-      this.logger.error(
-        `The user with this id: ${id}, does not have permissions to modify this comment`,
-      );
-      throw new ForbiddenException(
-        "The user does not have permissions to modify this comment.",
-      );
+      this.logger.error(`Feedback not found with the specified ID: ${feedbackId} and user ID: ${id}`);
+      throw new Error(`Feedback not found with the specified ID: ${feedbackId} and user ID: ${id}`);
     }
     feedback.grade = newGrade !== undefined ? newGrade : feedback.grade;
     feedback.text = newText !== undefined ? newText : feedback.text;
