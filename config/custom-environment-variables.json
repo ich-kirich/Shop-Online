@@ -1,0 +1,20 @@
+{
+  "server": {
+    "port": "SERVER_PORT"
+  },
+  "db": {
+    "database": "DB_DATABASE",
+    "username": "DB_USER",
+    "host": "DB_HOST",
+    "port": "DB_PORT",
+    "dialect": "DB_DIALECT",
+    "password": "DB_PASSWORD"
+  },
+  "jwt": {
+    "secretKey": "JWT_SECRET_KEY",
+    "expiresIn": "JWT_EXPIRES_IN"
+  },
+  "imageStorage": {
+    "apiKey": "IMAGE_API_KEY"
+  }
+}
